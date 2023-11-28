@@ -1,6 +1,6 @@
 <?php
 
-    require('C:\xampp\htdocs\wd2\Project\connect.php');
+    require('connect.php');
     require('adminauthenticate.php');
 
     if ($_POST &&

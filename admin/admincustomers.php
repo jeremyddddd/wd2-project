@@ -1,5 +1,5 @@
 <?php
-    require('C:\xampp\htdocs\wd2\Project\connect.php');
+    require('connect.php');
 
     if(!isset($_GET['id']))
     {

@@ -1,9 +1,9 @@
 <?php
 
-    require('C:\xampp\htdocs\wd2\Project\connect.php');
+    require('connect.php');
 
-    require ("C:\\xampp\htdocs\wd2\Project\image_resize\ImageResize.php");
-    require ("C:\\xampp\htdocs\wd2\Project\image_resize\ImageResizeException.php");
+    require ("C:\\xampp\htdocs\wd2\Project\wd2-project\image_resize\ImageResize.php");
+    require ("C:\\xampp\htdocs\wd2\Project\wd2-project\image_resize\ImageResizeException.php");
 
     use \Gumlet\ImageResize;
 

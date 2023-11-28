@@ -1,8 +1,7 @@
 <?php
 
-    require('C:\xampp\htdocs\wd2\Project\connect.php');
+    require('connect.php');
     
-
     if ($_POST &&
         isset($_POST['id']) && 
         isset($_POST['first_name']) && 

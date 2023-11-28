@@ -1,7 +1,6 @@
 <?php
 
-    require('C:\xampp\htdocs\wd2\Project\connect.php');
-    require('adminauthenticate.php');
+    require('connect.php');
 
     if (!$_GET)
     {        
