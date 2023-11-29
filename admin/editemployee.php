@@ -1,5 +1,6 @@
 <?php
-
+    session_start();
+    
     require('connect.php');
     
     if ($_POST &&
@@ -41,7 +42,7 @@
                     phone = :phone, 
                     email = :email, 
                     start_date = :start_date, 
-                    end_date = NULLIF(:endate, '0000-00-00'), 
+                    end_date = NULLIF(:end_date, '0000-00-00'), 
                     blacklist = NULLIF(:blacklist, '')
                   WHERE employee_id = :id";
         
@@ -57,7 +58,7 @@
         
         $statement->execute();
         
-        header("Location: admincustomers.php");
+        header("Location: adminemployees.php");
         exit;
     }
     else if (isset($_GET['id'])) 
@@ -74,15 +75,16 @@
 
         if (empty($employee['employee_id']))
         {
-            header("Location: adminindex.php");
+            header("Location: adminemployees.php");
         }
     }
     else
     {
-        header("Location: adminindex.php");
+        header("Location: adminemployees.php");
     }
 ?>
 
+<?php if(isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['role'] == 'admin'):?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -160,3 +162,9 @@
     </div>
 </body>
 </html>
+<?php else: ?>
+    <script>
+        alert('Authorized access only');
+        window.location.replace("/wd2/Project/wd2-project/public/Login.php");
+    </script>
+<?php endif ?>

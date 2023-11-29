@@ -1,4 +1,5 @@
 <?php
+    session_start();
 
     require('connect.php');
 
@@ -9,70 +10,75 @@
     use \Gumlet\ImageResize;
 
     if ($_POST &&
-    !empty($_POST['name']) && 
+    !empty($_POST['name']) &&
+    !empty($_POST['username']) &&  
     !empty($_POST['address']) && 
     !empty($_POST['phone']) &&
     !empty($_POST['email'])) 
-{
-    $firstName  = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $lastName = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-    $filepath = null;
-
-    // Contract upload
-    if (!empty($_FILES['file']['name'])) 
     {
-        $allowedFileTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
+        $username  = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $firstName  = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $address = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+        $filepath = null;
 
-        $fileType = mime_content_type($_FILES['file']['tmp_name']);
-
-        if (in_array($fileType, $allowedFileTypes)) 
+        // Contract upload
+        if (!empty($_FILES['file']['name'])) 
         {
-            $filename = pathinfo($_FILES['file']['name'], PATHINFO_FILENAME);
-            $extension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
-            $uploadDir = "C:/xampp/htdocs/wd2/Project/uploads/" . $filename . '_resized.' . $extension;
-            $filepath = "/wd2/Project/uploads/" . $filename . '_resized.' . $extension;
+            $allowedFileTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
 
-            $resizer = new ImageResize($_FILES['file']['tmp_name']);
-            $resizer->resizeToWidth(600);
+            $fileType = mime_content_type($_FILES['file']['tmp_name']);
 
-            if ($resizer->save($uploadDir)) 
-            {   
-                echo 'File updated successfully.';
+            if (in_array($fileType, $allowedFileTypes)) 
+            {
+                $filename = pathinfo($_FILES['file']['name'], PATHINFO_FILENAME);
+                $extension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+                $uploadDir = "C:/xampp/htdocs/wd2/Project/uploads/" . $filename . '_resized.' . $extension;
+                $filepath = "/wd2/Project/uploads/" . $filename . '_resized.' . $extension;
+
+                $resizer = new ImageResize($_FILES['file']['tmp_name']);
+                $resizer->resizeToWidth(600);
+
+                if ($resizer->save($uploadDir)) 
+                {   
+                    echo 'File updated successfully.';
+                } 
+                else 
+                {
+                    echo 'Sorry, a problem occurred when updating the file.';
+                }
+
             } 
             else 
             {
-                echo 'Sorry, a problem occurred when updating the file.';
+                echo 'Invalid file type. Only JPG, PNG, GIF, and PDF files are allowed.';
             }
-
         } 
         else 
         {
-            echo 'Invalid file type. Only JPG, PNG, GIF, and PDF files are allowed.';
+            echo 'Please select a valid file type. (eg. JPG, PNG, GIF, and PDF)';
         }
-    } 
-    else 
-    {
-        echo 'Please select a valid file type. (eg. JPG, PNG, GIF, and PDF)';
+
+        $query = "INSERT INTO customers (name, username, address, phone, email, image_filepath) 
+                  VALUES (:name, :username :address, :phone, :email, :image_filepath)";
+
+        $statement = $db->prepare($query);
+        $statement->bindValue(':name', $firstName);
+        $statement->bindValue(':username', $username);           
+        $statement->bindValue(':address', $address);
+        $statement->bindValue(':phone', $phone);
+        $statement->bindValue(':email', $email);
+        $statement->bindValue(':image_filepath', $filepath);
+
+        if($statement->execute())
+        {
+            header("Location: admincustomers.php");
+        }
     }
-
-    $query = "INSERT INTO customers (name, address, phone, email, image_filepath) VALUES (:name, :address, :phone, :email, :image_filepath)";
-
-    $statement = $db->prepare($query);
-    $statement->bindValue(':name', $firstName);        
-    $statement->bindValue(':address', $lastName);
-    $statement->bindValue(':phone', $phone);
-    $statement->bindValue(':email', $email);
-    $statement->bindValue(':image_filepath', $filepath);
-
-    if($statement->execute())
-    {
-        header("Location: admincustomers.php");
-    }
-}
 ?>
 
+<?php if(isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['role'] == 'admin'):?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -102,9 +108,14 @@
                         <label for="name">Company Name:</label>
                         <input type="text" name="name" id="name" required>
                     </p>
+
+                    <p>
+                        <label for="username">Username:</label>
+                        <input type="text" name="username" id="username" required>
+                    </p>
                     
                     <p>
-                        <label for="address">address:</label>
+                        <label for="address">Address:</label>
                         <input type="text" name="address" id="address" required>
                     </p>
 
@@ -126,10 +137,15 @@
                     </fieldset>
                     <br>
                     <button type="submit">Add Customer</button>
-                </fieldset>
-                
+                </fieldset>                
             </form>
         </div>
     </div>
 </body>
 </html>
+<?php else: ?>
+    <script>
+        alert('Authorized access only');
+        window.location.replace("/wd2/Project/wd2-project/public/Login.php");
+    </script>
+<?php endif ?>

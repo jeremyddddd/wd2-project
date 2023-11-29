@@ -1,7 +1,7 @@
 <?php
-
+    session_start();
+    
     require('connect.php');
-    require('adminauthenticate.php');
 
     if ($_POST &&
     !empty($_POST['first_name']) && 
@@ -32,6 +32,7 @@
 }
 ?>
 
+<?php if(isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['role'] == 'admin'):?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -89,3 +90,9 @@
     </div>
 </body>
 </html>
+<?php else: ?>
+    <script>
+        alert('Authorized access only');
+        window.location.replace("/wd2/Project/wd2-project/public/Login.php");
+    </script>
+<?php endif ?>

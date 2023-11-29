@@ -1,5 +1,14 @@
 <?php
+    session_start();
+
     require('connect.php');
+
+    if (isset($_GET['logout']) && $_GET['logout'] == 'true') 
+    {
+        session_destroy();
+        header("Location: /wd2/Project/wd2-project/public/Login.php");
+        exit;
+    }
 
     if(!isset($_GET['id']))
     {
@@ -12,6 +21,7 @@
 
 ?>
 
+<?php if(isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['role'] == 'admin'):?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,6 +51,9 @@
             </li>
             <li>
                 <a href="newcustomer.php">Insert new customer</a>
+            </li>
+            <li>
+                <a href="?logout=true">Logout</a>
             </li>
         </ul>
         <div>
@@ -75,3 +88,9 @@
     </div>
 </body>
 </html>
+<?php else: ?>
+    <script>
+        alert('Authorized access only');
+        window.location.replace("/wd2/Project/wd2-project/public/Login.php");
+    </script>
+<?php endif ?>

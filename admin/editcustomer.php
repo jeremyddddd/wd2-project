@@ -1,4 +1,5 @@
 <?php
+    session_start();
 
     require('connect.php');
 
@@ -6,6 +7,13 @@
     require ("C:\\xampp\htdocs\wd2\Project\wd2-project\image_resize\ImageResizeException.php");
 
     use \Gumlet\ImageResize;
+
+    if (isset($_GET['logout']) && $_GET['logout'] == 'true') 
+    {
+        session_destroy();
+        header("Location: /wd2/Project/wd2-project/public/Login.php");
+        exit;
+    }
 
     if ($_POST &&
         isset($_POST['id']) && 
@@ -163,6 +171,7 @@
     }
 ?>
 
+<?php if(isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['role'] == 'admin'):?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -241,3 +250,9 @@
     </div>
 </body>
 </html>
+<?php else: ?>
+    <script>
+        alert('Authorized access only');
+        window.location.replace("/wd2/Project/wd2-project/public/Login.php");
+    </script>
+<?php endif ?>
