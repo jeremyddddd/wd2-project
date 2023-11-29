@@ -10,7 +10,7 @@
         exit;
     }
 
-    if (!$_GET)
+    if (!isset($_GET['id']))
     {        
         $query = "SELECT * FROM employees ORDER BY employee_id DESC";
 
@@ -49,12 +49,12 @@
     }
     else
     {
-        header("Location: adminindex.php");
+        header("Location: adminemployees.php");
     }
 
 ?>
 
-<?php if(isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['role'] == 'admin'):?>
+<?php if(isset($_SESSION['username']) && $_SESSION['role'] == 'admin'):?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -72,23 +72,7 @@
                 <a href="adminemployees.php">Best Cleaners Solutions - Employees</a>   
             </h1>
         </div>
-        <ul id="menu">
-        <li>
-                <a href="adminemployees.php">View employees</a>
-            </li>
-            <li>
-                <a href="admincustomers.php">View customers</a>
-            </li>
-            <li>
-                <a href="newemployee.php">Insert new employee</a>
-            </li>
-            <li>
-                <a href="newcustomer.php">Insert new customer</a>
-            </li>
-            <li>
-                <a href="?logout=true">Logout</a>
-            </li>
-        </ul>
+        <?php include('adminmenubar.php'); ?>
         <div id="all_employees">
             <div class="sorting-options">
                 <label for="sort">Sort:</label>
@@ -114,7 +98,7 @@
             </div>
             <?php while($row = $statement->fetch()): ?>
                 <div>
-                    <h2 class = "employee_header">
+                    <h2 class = "name_header">
                         <a href=<?="editemployee.php?id={$row['employee_id']}" ?>><?= $row['first_name'] . ' ' . $row['last_name']?></a>
                     </h2>
                     <table>

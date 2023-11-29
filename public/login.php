@@ -19,10 +19,9 @@
 
         $user = $statement->fetch();
 
-        if ($user && $user['password'] == $password && $user['role'] == 'admin')
+        if ($user && password_verify($password, $user['password']) && $user['role'] == 'admin')
         {
             $_SESSION['username'] = $username;
-            $_SESSION['password'] = $password;
             $_SESSION['role'] = $user['role'];
 
             echo '<script type="text/javascript">'.       
@@ -30,10 +29,9 @@
                     'window.location.href = "/wd2/Project/wd2-project/admin/adminemployees.php";'.
                  '</script>';
         }
-        else if ($user && $user['password'] == $password && $user['role'] == 'customer')
+        else if ($user && password_verify($password, $user['password']) && $user['role'] == 'customer')
         {
             $_SESSION['username'] = $username;
-            $_SESSION['password'] = $password;
             $_SESSION['role'] = $user['role'];
 
             echo '<script type="text/javascript">'.       
@@ -65,8 +63,8 @@
             <p class='error'><?= $error_message ?></p>
         <?php endif ?>
         <form action="login.php" method="post">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
+            <input type="text" name="username" placeholder="Username" value="<?= isset($username) ? $username : '' ?>" required>
+            <input type="password" name="password" placeholder="Password" value="<?= isset($password) ? $password : '' ?>" required>
             <button type="submit">Login</button>
         </form>
         <p>or</p>

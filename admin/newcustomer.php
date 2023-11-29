@@ -34,8 +34,8 @@
             {
                 $filename = pathinfo($_FILES['file']['name'], PATHINFO_FILENAME);
                 $extension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
-                $uploadDir = "C:/xampp/htdocs/wd2/Project/uploads/" . $filename . '_resized.' . $extension;
-                $filepath = "/wd2/Project/uploads/" . $filename . '_resized.' . $extension;
+                $uploadDir = "C:/xampp/htdocs/wd2/Project/wd2-project/uploads/" . $filename . '_resized.' . $extension;
+                $filepath = "/wd2/Project/wd2-project/uploads/" . $filename . '_resized.' . $extension;
 
                 $resizer = new ImageResize($_FILES['file']['tmp_name']);
                 $resizer->resizeToWidth(600);
@@ -78,7 +78,7 @@
     }
 ?>
 
-<?php if(isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['role'] == 'admin'):?>
+<?php if(isset($_SESSION['username']) && $_SESSION['role'] == 'admin'):?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

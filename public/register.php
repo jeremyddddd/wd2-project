@@ -1,7 +1,9 @@
 <?php
     require('connect.php');
 
-    $error_message = '';
+    $password_error = '';
+    $username_error = '';
+    $email_error = '';
 
     if ($_POST &&
         !empty($_POST['username']) &&
@@ -14,36 +16,63 @@
         $confirm_password = filter_input(INPUT_POST, 'confirm_password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
         
-        if ($password == $confirm_password)
+        $checkQuery = "SELECT * FROM login WHERE username = :username";
+        $checkStatement = $db->prepare($checkQuery);
+        $checkStatement->bindValue(':username', $username);
+        $checkStatement->execute();
+        $existingUser = $checkStatement->fetch();
+
+        if ($existingUser && $username == $existingUser['username'])
         {
-            $query = "INSERT INTO login (username, password, email, role) VALUES (:username, :password, :email, 'customer')";
-
-            $statement = $db->prepare($query);
-            $statement->bindValue(':username', $username);
-            $statement->bindValue(':password', $password);
-            $statement->bindValue(':email', $email);
-
-            if($statement->execute())
-            {
-                $error_message = ''; 
-                echo '<script type="text/javascript">'.       
-                        'alert("Registration successful. You can now log in.");'.
-                        'window.location.href = "login.php";'.
-                     '</script>';
-            }
-            else
-            {
-                echo '<script type="text/javascript">'.       
-                        'alert("There has been an error. Please try again.");'.
-                        'window.location.href = "login.php";'.
-                     '</script>';
-            }
+            $username_error = 'Username is already taken. Please choose a different username.';
         }
         else
         {
-            $error_message = 'Password does not match';
-        }
+            if ($password != $confirm_password)
+            {
+                $password_error = 'Password does not match';
+            }
+            else
+            {
+                $checkEmailQuery = "SELECT * FROM login WHERE email = :email";
+                $checkEmailStatement = $db->prepare($checkEmailQuery);
+                $checkEmailStatement->bindValue(':email', $email);
+                $checkEmailStatement->execute();
+                $existingEmail = $checkEmailStatement->fetch();
 
+                if ($existingEmail && $email == $existingEmail['email'])
+                {
+                    $email_error = 'Email is already taken. Please choose a different email.';
+                }
+                else
+                {
+                    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+                    $query = "INSERT INTO login (username, password, email, role) VALUES (:username, :password, :email, 'customer')";
+
+                    $statement = $db->prepare($query);
+                    $statement->bindValue(':username', $username);
+                    $statement->bindValue(':password', $hashedPassword);
+                    $statement->bindValue(':email', $email);
+
+                    if($statement->execute())
+                    {
+                        $error_message = ''; 
+                        echo '<script type="text/javascript">'.       
+                                'alert("Registration successful. You can now log in.");'.
+                                'window.location.href = "login.php";'.
+                            '</script>';
+                    }
+                    else
+                    {
+                        echo '<script type="text/javascript">'.       
+                                'alert("There has been an error. Please try again.");'.
+                                'window.location.href = "login.php";'.
+                            '</script>';
+                    }
+                }
+            }
+        }
     }
 ?>
 
@@ -62,6 +91,9 @@
             <div class="form-group">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" placeholder="Enter your username" value="<?= isset($username) ? $username : '' ?>" required>
+                <?php if ($username_error != ''): ?>
+                    <p class='error'><?= $username_error ?></p>
+                <?php endif ?>
             </div>
 
             <div class="form-group">
@@ -72,14 +104,17 @@
             <div class="form-group">
                 <label for="confirm_password">Confirm Password:</label>
                 <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" value="<?= isset($confirm_password) ? $confirm_password : '' ?>" required>
-                <?php if ($error_message != ''): ?>
-                    <p class='error'><?= $error_message ?></p>
+                <?php if ($password_error != ''): ?>
+                    <p class='error'><?= $password_error ?></p>
                 <?php endif ?>
             </div>
 
             <div class="form-group">
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" placeholder="Enter your email" value="<?= isset($email) ? $email : '' ?>" required>
+                <?php if ($email_error != ''): ?>
+                    <p class='error'><?= $email_error ?></p>
+                <?php endif ?>
             </div>
 
             <button type="submit">Register</button>

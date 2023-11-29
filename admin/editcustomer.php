@@ -7,13 +7,7 @@
     require ("C:\\xampp\htdocs\wd2\Project\wd2-project\image_resize\ImageResizeException.php");
 
     use \Gumlet\ImageResize;
-
-    if (isset($_GET['logout']) && $_GET['logout'] == 'true') 
-    {
-        session_destroy();
-        header("Location: /wd2/Project/wd2-project/public/Login.php");
-        exit;
-    }
+    
 
     if ($_POST &&
         isset($_POST['id']) && 
@@ -86,9 +80,9 @@
         {
             $allowedFileTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
     
-            $uploadDir = "C:/xampp/htdocs/wd2/Project/uploads/";
+            $uploadDir = "C:/xampp/htdocs/wd2/Project/wd2-project/uploads/";
 
-            $filepath = "/wd2/Project/uploads/";
+            $filepath = "/wd2/Project/wd2-project/uploads/";
     
             $fileType = mime_content_type($_FILES['file']['tmp_name']);
     
@@ -171,7 +165,7 @@
     }
 ?>
 
-<?php if(isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['role'] == 'admin'):?>
+<?php if(isset($_SESSION['username']) && $_SESSION['role'] == 'admin'):?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

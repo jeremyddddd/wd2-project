@@ -10,15 +10,18 @@
         exit;
     }
 
-    if(!isset($_GET['id']))
-    {
-        $query = "SELECT * FROM customers ORDER BY customer_id DESC";
+    if (!isset($_GET['id']))
+    {        
+        $query = "SELECT * FROM login ORDER BY account_id DESC";
 
         $statement = $db->prepare($query);
 
-        $statement->execute();
+        $statement->execute();     
     }
-
+    else
+    {
+        header("Location: adminlogins.php");
+    }    
 ?>
 
 <?php if(isset($_SESSION['username']) && $_SESSION['role'] == 'admin'):?>
@@ -30,13 +33,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="table.css">
-    <title>Best Clearns Solutions - Customer Management</title>
+    <title>Best Clearns Solutions - Login Management</title>
 </head>
 <body>
     <div id="wrapper">
         <div id="header">
             <h1>
-                <a href="adminemployees.php">Best Cleaners Solutions - Customers</a>   
+                <a href="adminlogins.php">Best Cleaners Solutions - Logins</a>   
             </h1>
         </div>
         <?php include('adminmenubar.php'); ?>
@@ -44,26 +47,18 @@
             <?php while($row = $statement->fetch()): ?>
                 <div>
                     <h2 class = "name_header">
-                        <a href=<?="editcustomer.php?id={$row['customer_id']}" ?>><?= $row['name'] ?></a>
+                        <a href=<?="editlogin.php?id={$row['account_id']}" ?>><?= $row['username'] ?></a>
                     </h2>
                     <table>
                         <tr>
-                            <th class="small-col">Customer ID</th>
-                            <th>Company name</th>
-                            <th class="wide-col">Address</th>
-                            <th class="small-col">Phone</th>
-                            <th class="wide-col">Email</th>
-                            <th class="wide-col">Registered Date</th>
-                            <th class="small-col">Blacklisted</th>
+                            <th class="small-col">Account ID</th>
+                            <th>Username</th>
+                            <th>email</th>
                         </tr>
                         <tr>
-                            <td class="small-col"><?= $row['customer_id'] ?></td>
-                            <td><?= $row['name'] ?></td>
-                            <td class="wide-col"><?= $row['address'] ?></td>
-                            <td class="small-col"><?= $row['phone'] ?></td>
-                            <td class="wide-col"><?= $row['email'] ?></td>
-                            <td class="wide-col"><?= $row['registered_date'] ?></td>
-                            <td class="small-col"><?= $row['blacklist'] ?></td>
+                            <td class="small-col"><?= $row['account_id'] ?></td>
+                            <td><?= $row['username'] ?></td>
+                            <td><?= $row['email'] ?></td>
                         </tr>
                     </table>       
                 </div>

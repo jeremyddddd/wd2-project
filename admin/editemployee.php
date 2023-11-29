@@ -84,7 +84,7 @@
     }
 ?>
 
-<?php if(isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['role'] == 'admin'):?>
+<?php if(isset($_SESSION['username']) && $_SESSION['role'] == 'admin'):?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
