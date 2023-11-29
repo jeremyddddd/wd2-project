@@ -15,7 +15,7 @@
         <a href="newcustomer.php">Insert new customer</a>
     </li>
     <li>
-        <a href="newlogin.php">Insert new customer</a>
+        <a href="newlogin.php">Insert new user</a>
     </li>
     <li>
         <a href="?logout=true">Logout</a>

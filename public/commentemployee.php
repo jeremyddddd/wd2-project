@@ -1,8 +1,68 @@
 <?php
+    session_start();
 
     require('connect.php');
 
-    if (isset($_GET['id']))
+    $employee = null;
+
+    function generateCaptchaCode($length = 4)
+    {
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $captchaCode = '';
+        for ($i = 0; $i < $length; $i++) {
+            $captchaCode .= $characters[rand(0, strlen($characters) - 1)];
+        }
+        return $captchaCode;
+    }
+
+    if (isset($_POST['employee_id']) && isset($_POST['commenter_name']) && isset($_POST['comment']))
+    {
+        $employee_id = $_POST['employee_id'];
+        $first_name = $_POST['first_name'];
+        $last_name = $_POST['last_name'];
+        $phone = $_POST['phone'];
+        $email = $_POST['email'];
+
+        $name = filter_input(INPUT_POST, 'commenter_name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $comment = filter_input(INPUT_POST, 'comment', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $captcha_input = filter_input(INPUT_POST, 'captcha', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+        $query = "SELECT *
+                  FROM employees
+                  WHERE employee_id = :id";
+
+        $statement = $db->prepare($query);
+
+        $statement->bindValue(':id', $employee_id, PDO::PARAM_INT);
+
+        $statement->execute();
+
+        $employee = $statement->fetch();
+
+        if (empty($captcha_input) || strtoupper($captcha_input) !== $_SESSION['captcha']) 
+        {
+            $captcha_error = 'CAPTCHA code is incorrect. Please try again.';
+
+            $captcha_code = generateCaptchaCode();
+            $_SESSION['captcha'] = strtoupper($captcha_code);
+        }
+        else
+        {
+            $insertquery = "INSERT INTO employeepubliccomments (commenter_name, comment, employee_id) VALUES (:name, :comment, :employee_id)";
+            $statement = $db->prepare($insertquery);
+
+            $statement->bindValue(":name", $name);
+            $statement->bindValue(":comment", $comment);
+            $statement->bindValue(":employee_id", $employee_id);
+
+            if($statement->execute())
+            {
+                header("Location: commentemployee.php?id={$employee_id}");
+            }            
+        }
+            
+    }
+    else if (isset($_GET['id']))
     {
         $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 
@@ -18,7 +78,10 @@
 
         $employee = $statement->fetch();
 
-        if (empty($employee['employee_id']))
+        $captcha_code = generateCaptchaCode();
+        $_SESSION['captcha'] = strtoupper($captcha_code);
+
+        if ($employee === false || empty($employee['employee_id'])) 
         {
             header("Location: publicemployees.php");
             exit;
@@ -35,31 +98,6 @@
 
         $statementTwo->execute();
     }
-    else if (isset($_POST['id']) && isset($_POST['commenter_name']) && isset($_POST['comment']))
-    {
-        $id = $_POST['id'];
-        $name = filter_input(INPUT_POST, 'commenter_name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $comment = filter_input(INPUT_POST, 'comment', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
-        $insertquery = "INSERT INTO employeepubliccomments (commenter_name, comment, employee_id) VALUES (:name, :comment, :employee_id)";
-        $statement = $db->prepare($insertquery);
-
-        $statement->bindValue(":name", $name);
-        $statement->bindValue(":comment", $comment);
-        $statement->bindValue(":employee_id", $id);
-
-        if($statement->execute())
-        {
-            header("Location: commentemployee.php?id={$id}");
-            exit;
-        }            
-    }
-    else
-    {
-        header("Location: publicemployees.php");
-        exit;
-    }
-
 ?>
 
 <!DOCTYPE html>
@@ -89,35 +127,50 @@
                         <legend>Employee Details</legend>
                         <p>
                             <label for="employee_id">Employee ID:</label>
-                            <?=$employee['employee_id']?>
+                            <?= isset($employee_id) ? $employee_id : $employee['employee_id'] ?>
                         </p>
                         <p>
                             <label for="first_name">First Name:</label>
-                            <?=$employee['first_name']?>
+                            <?= isset($first_name) ? $first_name : $employee['first_name'] ?>
+                            <input type="hidden" name="first_name" value="<?= $employee['first_name'] ?>">
                         </p>
                         <p>
                             <label for="last_name">Last Name:</label>
-                            <?=$employee['last_name']?>
+                            <?= isset($last_name) ? $last_name : $employee['last_name'] ?>
+                            <input type="hidden" name="last_name" value="<?= $employee['last_name'] ?>">
                         </p>
                         <p>
                             <label for="phone">Phone:</label>
-                            <?=$employee['phone']?>
+                            <?= isset($phone) ? $phone : $employee['phone'] ?>
+                            <input type="hidden" name="phone" value="<?= $employee['phone'] ?>">
                         </p>
                         <p>
                             <label for="email">Email:</label>
-                            <?=$employee['email']?>
+                            <?= isset($email) ? $email : $employee['email'] ?>
+                            <input type="hidden" name="email" value="<?= $employee['email'] ?>">
                         </p>
                     </fieldset>
                     <fieldset>
                         <legend>Post your comment</legend>
                         <p>
                             <label for="commenter_name">Name:</label>
-                            <input type="text" name="commenter_name" id="commenter_name" required>
+                            <input type="text" name="commenter_name" id="commenter_name" value="<?= isset($name) ? $name : '' ?>" required>
                         </p>
                         <p>
-                            <textarea id="comment" name="comment"></textarea>
+                            <textarea id="comment" name="comment"><?= isset($comment) ? $comment : '' ?></textarea>
                         </p>
-                        <input type="hidden" name="id" value=<?= $employee['employee_id'] ?>>
+                        <div class="form-group">
+                            <div>
+                                <label for="captcha">CAPTCHA:</label>
+                            </div>
+                            <img src="captcha_image.php" alt="CAPTCHA Image">
+                            <input type="text" id="captcha" name="captcha" placeholder="Enter CAPTCHA code" required>
+                            <?php if (isset($captcha_error)): ?>
+                                <p class='error'><?= $captcha_error ?></p>
+                            <?php endif ?>
+                        </div>
+                        <br>
+                        <input type="hidden" name="employee_id" value="<?= $employee['employee_id'] ?>">
                         <input type="submit" name="post" value="Post">
                     </fieldset>
                 </form>

@@ -1,9 +1,22 @@
 <?php
+    session_start();
+    
     require('connect.php');
 
     $password_error = '';
     $username_error = '';
     $email_error = '';
+    
+    function generateCaptchaCode($length = 4)
+    {
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $captchaCode = '';
+        for ($i = 0; $i < $length; $i++) 
+        {
+            $captchaCode .= $characters[rand(0, strlen($characters) - 1)];
+        }
+        return $captchaCode;
+    }
 
     if ($_POST &&
         !empty($_POST['username']) &&
@@ -15,6 +28,7 @@
         $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $confirm_password = filter_input(INPUT_POST, 'confirm_password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+        $captcha_input = filter_input(INPUT_POST, 'captcha', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         
         $checkQuery = "SELECT * FROM login WHERE username = :username";
         $checkStatement = $db->prepare($checkQuery);
@@ -46,34 +60,45 @@
                 }
                 else
                 {
-                    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-                    $query = "INSERT INTO login (username, password, email, role) VALUES (:username, :password, :email, 'customer')";
-
-                    $statement = $db->prepare($query);
-                    $statement->bindValue(':username', $username);
-                    $statement->bindValue(':password', $hashedPassword);
-                    $statement->bindValue(':email', $email);
-
-                    if($statement->execute())
+                    if (empty($captcha_input) || strtoupper($captcha_input) !== $_SESSION['captcha']) 
                     {
-                        $error_message = ''; 
-                        echo '<script type="text/javascript">'.       
-                                'alert("Registration successful. You can now log in.");'.
-                                'window.location.href = "login.php";'.
-                            '</script>';
+                        $captcha_error = 'CAPTCHA code is incorrect. Please try again.';
                     }
                     else
                     {
-                        echo '<script type="text/javascript">'.       
-                                'alert("There has been an error. Please try again.");'.
-                                'window.location.href = "login.php";'.
-                            '</script>';
+                        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+                        $query = "INSERT INTO login (username, password, email, role) VALUES (:username, :password, :email, 'customer')";
+
+                        $statement = $db->prepare($query);
+                        $statement->bindValue(':username', $username);
+                        $statement->bindValue(':password', $hashedPassword);
+                        $statement->bindValue(':email', $email);
+
+                        if($statement->execute())
+                        {
+                            $error_message = ''; 
+                            echo '<script type="text/javascript">'.       
+                                    'alert("Registration successful. You can now log in.");'.
+                                    'window.location.href = "login.php";'.
+                                '</script>';
+                        }
+                        else
+                        {
+                            echo '<script type="text/javascript">'.       
+                                    'alert("There has been an error. Please try again.");'.
+                                    'window.location.href = "login.php";'.
+                                '</script>';
+                        }
                     }
                 }
             }
         }
     }
+
+    $captcha_code = generateCaptchaCode();
+    $_SESSION['captcha'] = strtoupper($captcha_code);
+
 ?>
 
 <!DOCTYPE html>
@@ -114,6 +139,15 @@
                 <input type="email" id="email" name="email" placeholder="Enter your email" value="<?= isset($email) ? $email : '' ?>" required>
                 <?php if ($email_error != ''): ?>
                     <p class='error'><?= $email_error ?></p>
+                <?php endif ?>
+            </div>
+
+            <div class="form-group">
+                <label for="captcha">CAPTCHA:</label>
+                <img src="captcha_image.php" alt="CAPTCHA Image">
+                <input type="text" id="captcha" name="captcha" placeholder="Enter CAPTCHA code" required>
+                <?php if (isset($captcha_error)): ?>
+                    <p class='error'><?= $captcha_error ?></p>
                 <?php endif ?>
             </div>
 
