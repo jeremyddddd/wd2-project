@@ -55,7 +55,9 @@
         {
             $query = "SELECT * FROM employees WHERE 
                       first_name LIKE :search OR 
-                      last_name LIKE :search";
+                      last_name LIKE :search OR 
+                      phone LIKE :search OR 
+                      email LIKE :search";
     
             $statement = $db->prepare($query);
             $statement->bindValue(':search', '%' . $search . '%');
@@ -63,7 +65,7 @@
         } 
         else 
         {
-            header("Location: admincustomers.php");
+            header("Location: adminemployees.php");
             exit;
         }
     } 

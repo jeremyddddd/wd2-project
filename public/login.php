@@ -23,6 +23,7 @@
         {
             $_SESSION['username'] = $username;
             $_SESSION['role'] = $user['role'];
+            $_SESSION['account_id'] = $user['account_id'];
 
             echo '<script type="text/javascript">'.       
                     'alert("Login successful.");'.
@@ -33,6 +34,7 @@
         {
             $_SESSION['username'] = $username;
             $_SESSION['role'] = $user['role'];
+            $_SESSION['account_id'] = $user['account_id'];
 
             echo '<script type="text/javascript">'.       
                     'alert("Login successful.");'.

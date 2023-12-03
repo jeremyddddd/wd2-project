@@ -10,7 +10,7 @@
         exit;
     }
 
-    if(!isset($_GET['id']))
+    if(!isset($_GET['id']) && !isset($_GET['search']))
     {
         $query = "SELECT * FROM customers ORDER BY customer_id DESC";
 
@@ -18,6 +18,28 @@
 
         $statement->execute();
     }
+    else if (isset($_GET['search'])) 
+    {
+        $search = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+        if (!empty($search)) 
+        {
+            $query = "SELECT * FROM customers WHERE 
+                      name LIKE :search OR 
+                      address LIKE :search OR
+                      phone LIKE :search OR 
+                      email LIKE :search";
+    
+            $statement = $db->prepare($query);
+            $statement->bindValue(':search', '%' . $search . '%');
+            $statement->execute();
+        } 
+        else 
+        {
+            header("Location: admincustomers.php");
+            exit;
+        }
+    } 
 
 ?>
 
@@ -40,6 +62,13 @@
             </h1>
         </div>
         <?php include('adminmenubar.php'); ?>
+        <div class="search-form">
+            <form action="admincustomers.php" method="GET">
+                <label for="search">Search:</label>
+                <input type="text" name="search" id="search" placeholder="Enter search keyword">
+                <button type="submit">Search</button>
+            </form>
+        </div>
         <div>
             <?php while($row = $statement->fetch()): ?>
                 <div>
