@@ -9,6 +9,9 @@
         <a href="adminlogins.php">View logins</a>
     </li>
     <li>
+        <a href="adminpublicemployees.php">View comments</a>
+    </li>
+    <li>
         <a href="newemployee.php">Insert new employee</a>
     </li>
     <li>

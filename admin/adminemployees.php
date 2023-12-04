@@ -205,15 +205,15 @@
             <?php if ($totalResults > $resultsPerPage): ?>
                 <div class="pagination">
                     <?php if ($page > 1): ?>
-                        <a href="?search=<?= urlencode($search) ?>&column=<?= $column ?>&page=<?= ($page - 1) ?>">Previous</a>
+                        <a href="?search=<?= $search ?>&column=<?= $column ?>&page=<?= ($page - 1) ?>">Previous</a>
                     <?php endif ?>
 
                     <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                        <a href="?search=<?= urlencode($search) ?>&column=<?= $column ?>&page=<?= $i ?>"><?= $i ?></a>
+                        <a href="?search=<?= $search ?>&column=<?= $column ?>&page=<?= $i ?>"><?= $i ?></a>
                     <?php endfor ?>
 
                     <?php if ($page < $totalPages): ?>
-                        <a href="?search=<?= urlencode($search) ?>&column=<?= $column ?>&page=<?= ($page + 1) ?>">Next</a>
+                        <a href="?search=<?= $search ?>&column=<?= $column ?>&page=<?= ($page + 1) ?>">Next</a>
                     <?php endif ?>
                 </div>
             <?php endif ?>

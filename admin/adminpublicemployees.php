@@ -1,4 +1,5 @@
 <?php
+    session_start();
 
     require('connect.php');
 
@@ -49,17 +50,18 @@
         } 
         else 
         {
-            header("Location: publicemployees.php");
+            header("Location: adminpublicemployees.php");
             exit;
         }
     } 
     else
     {
-        header("Location: publicemployees.php");
+        header("Location: adminpublicemployees.php");
     }
 
 ?>
 
+<?php if(isset($_SESSION['username']) && $_SESSION['role'] == 'admin'):?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,7 +76,7 @@
     <div id="wrapper">
         <div id="header">
             <h1>
-                <a href="publicemployees.php">Best Cleaners Solutions - Employees</a>   
+                <a href="adminpublicemployees.php">Best Cleaners Solutions - Employees</a>   
             </h1>
         </div>
         <ul id="menu">
@@ -84,8 +86,8 @@
                 <label for="sort">Sort:</label>
                 <select name="sort" id="sort" onchange="location = this.value;">
                     <option>Select</option>
-                    <option value="publicemployees.php?sort=lastname">Last Name (A-Z)</option>
-                    <option value="publicemployees.php?sort=id">Employee ID (Least to Greatest)</option>
+                    <option value="adminpublicemployees.php?sort=lastname">Last Name (A-Z)</option>
+                    <option value="adminpublicemployees.php?sort=id">Employee ID (Least to Greatest)</option>
                 </select>
                 <?php if (isset($sort) && $sort == "lastname"): ?>
                     <h3>
@@ -98,7 +100,7 @@
                 <?php endif ?>
             </div>
             <div class="search-form">
-                <form action="publicemployees.php" method="GET">
+                <form action="adminpublicemployees.php" method="GET">
                     <label for="search">Search:</label>
                     <input type="text" name="search" id="search" placeholder="Enter search keyword">
                     <button type="submit">Search</button>
@@ -107,7 +109,7 @@
             <?php while($row = $statement->fetch()): ?>
                 <div>
                     <h2 class = "employee_header">
-                        <a href=<?="commentemployee.php?id={$row['employee_id']}" ?>><?= $row['first_name'] . ' ' . $row['last_name']?></a>
+                        <a href=<?="comments.php?id={$row['employee_id']}" ?>><?= $row['first_name'] . ' ' . $row['last_name']?></a>
                     </h2>
                     <table>
                         <tr>
@@ -131,3 +133,9 @@
     </div>
 </body>
 </html>
+<?php else: ?>
+    <script>
+        alert('Authorized access only');
+        window.location.replace("/wd2/Project/wd2-project/public/Login.php");
+    </script>
+<?php endif ?>
