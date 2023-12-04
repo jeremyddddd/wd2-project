@@ -86,6 +86,7 @@
     }
 ?>
 
+<?php if(isset($_SESSION['username']) && $_SESSION['role'] == 'admin'):?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -155,3 +156,9 @@
     </div>
 </body>
 </html>
+<?php else: ?>
+    <script>
+        alert('Authorized access only');
+        window.location.replace("/wd2/Project/wd2-project/public/Login.php");
+    </script>
+<?php endif ?>
