@@ -3,6 +3,17 @@
 
     require('connect.php');
 
+    $allowedColumns = [
+        'name' => 'Company Name',
+        'address' => 'Address',
+        'email' => 'Email',
+        'phone' => 'Phone'
+    ];
+
+    $totalResults = 0;
+    $queryCount = "";
+    $resultsPerPage = 2;
+
     if (isset($_GET['logout']) && $_GET['logout'] == 'true') 
     {
         session_destroy();
@@ -21,17 +32,49 @@
     else if (isset($_GET['search'])) 
     {
         $search = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        
+        $column = filter_input(INPUT_GET, 'column', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+        echo $column;
 
         if (!empty($search)) 
         {
-            $query = "SELECT * FROM customers WHERE 
-                      name LIKE :search OR 
-                      address LIKE :search OR
-                      phone LIKE :search OR 
-                      email LIKE :search";
+            if ($column === 'all') 
+            {
+                $queryCount = "SELECT COUNT(*) FROM customers WHERE 
+                    name LIKE :search OR 
+                    address LIKE :search OR 
+                    phone LIKE :search OR 
+                    email LIKE :search";
+                
+                $query = "SELECT * FROM customers WHERE 
+                    name LIKE :search OR 
+                    address LIKE :search OR 
+                    phone LIKE :search OR 
+                    email LIKE :search";
+            } 
+            else 
+            {
+                $queryCount = "SELECT COUNT(*) FROM customers WHERE $column LIKE :search";
+                $query = "SELECT * FROM customers WHERE $column LIKE :search";
+            }
+    
+            $statementCount = $db->prepare($queryCount);
+            $statementCount->bindValue(':search', '%' . $search . '%');
+            $statementCount->execute();
+            $totalResults = $statementCount->fetchColumn();
+    
+            $totalPages = ceil($totalResults / $resultsPerPage);
+    
+            $page = isset($_GET['page']) ? max(1, $_GET['page']) : 1;
+            $offset = ($page - 1) * $resultsPerPage;
+    
+            $query .= " LIMIT :limit OFFSET :offset";
     
             $statement = $db->prepare($query);
             $statement->bindValue(':search', '%' . $search . '%');
+            $statement->bindValue(':limit', $resultsPerPage, PDO::PARAM_INT);
+            $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
             $statement->execute();
         } 
         else 
@@ -58,7 +101,7 @@
     <div id="wrapper">
         <div id="header">
             <h1>
-                <a href="adminemployees.php">Best Cleaners Solutions - Customers</a>   
+                <a href="admincustomers.php">Best Cleaners Solutions - Customers</a>   
             </h1>
         </div>
         <?php include('adminmenubar.php'); ?>
@@ -66,6 +109,13 @@
             <form action="admincustomers.php" method="GET">
                 <label for="search">Search:</label>
                 <input type="text" name="search" id="search" placeholder="Enter search keyword">
+                <label for="column">Search by Column:</label>
+                <select name="column" id="column">
+                    <option value="all">All Columns</option>
+                    <?php foreach ($allowedColumns as $columnName => $displayName): ?>
+                        <option value="<?= $columnName ?>"><?= $displayName ?></option>
+                    <?php endforeach; ?>
+                </select>
                 <button type="submit">Search</button>
             </form>
         </div>
@@ -96,7 +146,22 @@
                         </tr>
                     </table>       
                 </div>
-            <?php endwhile ?>            
+            <?php endwhile ?>
+            <?php if ($totalResults > $resultsPerPage): ?>
+                <div class="pagination">
+                    <?php if ($page > 1): ?>
+                        <a href="?search=<?= urlencode($search) ?>&column=<?= $column ?>&page=<?= ($page - 1) ?>">Previous</a>
+                    <?php endif ?>
+
+                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                        <a href="?search=<?= urlencode($search) ?>&column=<?= $column ?>&page=<?= $i ?>"><?= $i ?></a>
+                    <?php endfor ?>
+
+                    <?php if ($page < $totalPages): ?>
+                        <a href="?search=<?= urlencode($search) ?>&column=<?= $column ?>&page=<?= ($page + 1) ?>">Next</a>
+                    <?php endif ?>
+                </div>
+            <?php endif ?>            
         </div>
     </div>
 </body>

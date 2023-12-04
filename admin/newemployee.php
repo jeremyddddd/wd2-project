@@ -27,7 +27,7 @@
 
     if($statement->execute())
     {
-        header("Location: adminindex.php");
+        header("Location: adminemployees.php");
     }
 }
 ?>

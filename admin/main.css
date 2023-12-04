@@ -41,3 +41,20 @@ div.comment_post div.comment_content p
 .error-field {
     border: 1px solid #ff0000; 
 }
+
+.pagination {
+    margin-top: 20px; /* Adjust the margin-top as needed */
+}
+
+.pagination a {
+    padding: 8px;
+    margin: 0 5px;
+    text-decoration: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #333;
+}
+
+.pagination a:hover {
+    background-color: #ddd;
+}

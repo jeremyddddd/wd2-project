@@ -4,19 +4,17 @@
     require('connect.php');
 
     require ("C:\\xampp\htdocs\wd2\Project\wd2-project\image_resize\ImageResize.php");
-    require ("C:\\xampp\htdocs\wd2\Project\wd2-project\\image_resize\ImageResizeException.php");
+    require ("C:\\xampp\htdocs\wd2\Project\wd2-project\image_resize\ImageResizeException.php");
 
 
     use \Gumlet\ImageResize;
 
     if ($_POST &&
-    !empty($_POST['name']) &&
-    !empty($_POST['username']) &&  
+    !empty($_POST['name']) && 
     !empty($_POST['address']) && 
     !empty($_POST['phone']) &&
     !empty($_POST['email'])) 
     {
-        $username  = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $firstName  = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $address = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -60,12 +58,11 @@
             echo 'Please select a valid file type. (eg. JPG, PNG, GIF, and PDF)';
         }
 
-        $query = "INSERT INTO customers (name, username, address, phone, email, image_filepath) 
-                  VALUES (:name, :username :address, :phone, :email, :image_filepath)";
+        $query = "INSERT INTO customers (name, address, phone, email, image_filepath) 
+                  VALUES (:name, :address, :phone, :email, :image_filepath)";
 
         $statement = $db->prepare($query);
-        $statement->bindValue(':name', $firstName);
-        $statement->bindValue(':username', $username);           
+        $statement->bindValue(':name', $firstName);         
         $statement->bindValue(':address', $address);
         $statement->bindValue(':phone', $phone);
         $statement->bindValue(':email', $email);
@@ -107,11 +104,6 @@
                     <p>
                         <label for="name">Company Name:</label>
                         <input type="text" name="name" id="name" required>
-                    </p>
-
-                    <p>
-                        <label for="username">Username:</label>
-                        <input type="text" name="username" id="username" required>
                     </p>
                     
                     <p>

@@ -10,6 +10,10 @@
         'phone' => 'Phone'
     ];
 
+    $totalResults = 0;
+    $queryCount = "";
+    $resultsPerPage = 2;
+
     if (isset($_GET['logout']) && $_GET['logout'] == 'true') 
     {
         session_destroy();
@@ -58,25 +62,46 @@
     {
         $search = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         
-        $column = isset($_GET['column']) && in_array($_GET['column'], $allowedColumns) ? $_GET['column'] : 'all';
+        $column = filter_input(INPUT_GET, 'column', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         if (!empty($search)) 
         {
             if ($column === 'all') 
             {
+                $queryCount = "SELECT COUNT(*) FROM employees WHERE 
+                    first_name LIKE :search OR 
+                    last_name LIKE :search OR 
+                    phone LIKE :search OR 
+                    email LIKE :search";
+                
                 $query = "SELECT * FROM employees WHERE 
-                            first_name LIKE :search OR 
-                            last_name LIKE :search OR 
-                            phone LIKE :search OR 
-                            email LIKE :search";
+                    first_name LIKE :search OR 
+                    last_name LIKE :search OR 
+                    phone LIKE :search OR 
+                    email LIKE :search";
             } 
             else 
             {
+                $queryCount = "SELECT COUNT(*) FROM employees WHERE $column LIKE :search";
                 $query = "SELECT * FROM employees WHERE $column LIKE :search";
             }
     
+            $statementCount = $db->prepare($queryCount);
+            $statementCount->bindValue(':search', '%' . $search . '%');
+            $statementCount->execute();
+            $totalResults = $statementCount->fetchColumn();
+    
+            $totalPages = ceil($totalResults / $resultsPerPage);
+    
+            $page = isset($_GET['page']) ? max(1, $_GET['page']) : 1;
+            $offset = ($page - 1) * $resultsPerPage;
+    
+            $query .= " LIMIT :limit OFFSET :offset";
+    
             $statement = $db->prepare($query);
             $statement->bindValue(':search', '%' . $search . '%');
+            $statement->bindValue(':limit', $resultsPerPage, PDO::PARAM_INT);
+            $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
             $statement->execute();
         } 
         else 
@@ -177,6 +202,21 @@
                     </table>       
                 </div>
             <?php endwhile ?>
+            <?php if ($totalResults > $resultsPerPage): ?>
+                <div class="pagination">
+                    <?php if ($page > 1): ?>
+                        <a href="?search=<?= urlencode($search) ?>&column=<?= $column ?>&page=<?= ($page - 1) ?>">Previous</a>
+                    <?php endif ?>
+
+                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                        <a href="?search=<?= urlencode($search) ?>&column=<?= $column ?>&page=<?= $i ?>"><?= $i ?></a>
+                    <?php endfor ?>
+
+                    <?php if ($page < $totalPages): ?>
+                        <a href="?search=<?= urlencode($search) ?>&column=<?= $column ?>&page=<?= ($page + 1) ?>">Next</a>
+                    <?php endif ?>
+                </div>
+            <?php endif ?>
         </div>          
     </div>
 </body>
