@@ -2,7 +2,7 @@
 
     require('connect.php');
 
-    if (!$_GET)
+    if (!$_GET && !isset($_GET['search']))
     {        
         $query = "SELECT * FROM employees ORDER BY employee_id DESC";
 
@@ -31,9 +31,31 @@
             $statement->execute();
         }
     }
+    else if (isset($_GET['search'])) 
+    {
+        $search = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+        if (!empty($search)) 
+        {
+            $query = "SELECT * FROM employees WHERE 
+                      first_name LIKE :search OR 
+                      last_name LIKE :search OR
+                      phone LIKE :search OR 
+                      email LIKE :search";
+    
+            $statement = $db->prepare($query);
+            $statement->bindValue(':search', '%' . $search . '%');
+            $statement->execute();
+        } 
+        else 
+        {
+            header("Location: publicemployees.php");
+            exit;
+        }
+    } 
     else
     {
-        header("Location: publicemployee.php");
+        header("Location: publicemployees.php");
     }
 
 ?>
@@ -74,6 +96,13 @@
                         Sorted by: Employee ID (Least to Greatest)
                     </h3>
                 <?php endif ?>
+            </div>
+            <div class="search-form">
+                <form action="publicemployees.php" method="GET">
+                    <label for="search">Search:</label>
+                    <input type="text" name="search" id="search" placeholder="Enter search keyword">
+                    <button type="submit">Search</button>
+                </form>
             </div>
             <?php while($row = $statement->fetch()): ?>
                 <div>

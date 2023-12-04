@@ -5,6 +5,8 @@
 
     $employee = null;
 
+    $statementTwo = null;
+
     function generateCaptchaCode($length = 4)
     {
         $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -60,9 +62,14 @@
                 header("Location: commentemployee.php?id={$employee_id}");
             }            
         }
-            
+
+        $commentquery = "SELECT * FROM employeepubliccomments WHERE employee_id = :id ORDER BY date DESC";
+        $statementTwo = $db->prepare($commentquery);
+        $statementTwo->bindValue(':id', $employee_id, PDO::PARAM_INT);
+        $statementTwo->execute();            
     }
-    else if (isset($_GET['id']))
+    
+    if (isset($_GET['id']))
     {
         $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 
@@ -175,7 +182,7 @@
                     </fieldset>
                 </form>
                 <div id="all_comments">
-                    <?php while ($comment = $statementTwo->fetch()): ?>
+                    <?php while ($statementTwo !== null && $comment = $statementTwo->fetch()): ?>
                         <div class="comment_post">
                             <h3><?= $comment['commenter_name'] ?></h3>
                             <small><?= date("F d, Y h:i a", strtotime($comment['date']))?></small>
