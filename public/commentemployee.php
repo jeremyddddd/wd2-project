@@ -96,7 +96,8 @@
 
         $commentquery = "SELECT *
                          FROM employeepubliccomments
-                         WHERE employee_id = :id 
+                         WHERE employee_id = :id AND
+                         hidden IS NULL
                          ORDER BY date DESC";
 
         $statementTwo = $db->prepare($commentquery);
