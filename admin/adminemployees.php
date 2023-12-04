@@ -3,6 +3,13 @@
 
     require('connect.php');
 
+    $allowedColumns = [
+        'first_name' => 'First Name',
+        'last_name' => 'Last Name',
+        'email' => 'Email',
+        'phone' => 'Phone'
+    ];
+
     if (isset($_GET['logout']) && $_GET['logout'] == 'true') 
     {
         session_destroy();
@@ -10,7 +17,7 @@
         exit;
     }
 
-    if (!isset($_GET['id']) && !isset($_GET['search']))
+    if (!isset($_GET['id']) && !isset($_GET['search']) && !isset($_GET['sort']))
     {        
         $query = "SELECT * FROM employees ORDER BY employee_id DESC";
 
@@ -50,14 +57,23 @@
     else if (isset($_GET['search'])) 
     {
         $search = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        
+        $column = isset($_GET['column']) && in_array($_GET['column'], $allowedColumns) ? $_GET['column'] : 'all';
 
         if (!empty($search)) 
         {
-            $query = "SELECT * FROM employees WHERE 
-                      first_name LIKE :search OR 
-                      last_name LIKE :search OR 
-                      phone LIKE :search OR 
-                      email LIKE :search";
+            if ($column === 'all') 
+            {
+                $query = "SELECT * FROM employees WHERE 
+                            first_name LIKE :search OR 
+                            last_name LIKE :search OR 
+                            phone LIKE :search OR 
+                            email LIKE :search";
+            } 
+            else 
+            {
+                $query = "SELECT * FROM employees WHERE $column LIKE :search";
+            }
     
             $statement = $db->prepare($query);
             $statement->bindValue(':search', '%' . $search . '%');
@@ -100,9 +116,9 @@
                 <label for="sort">Sort:</label>
                 <select name="sort" id="sort" onchange="location = this.value;">
                     <option>Select</option>
-                    <option value="index.php?sort=id">Employee ID (Least to Greatest)</option>
-                    <option value="index.php?sort=lastname">Last Name (A-Z)</option>
-                    <option value="index.php?sort=startdate">Start Date (Oldest to Newest)</option>
+                    <option value="adminemployees.php?sort=id">Employee ID (Least to Greatest)</option>
+                    <option value="adminemployees.php?sort=lastname">Last Name (A-Z)</option>
+                    <option value="adminemployees.php?sort=startdate">Start Date (Oldest to Newest)</option>
                 </select>
                 <?php if (isset($sort) && $sort == "id"): ?>
                     <h3>
@@ -122,6 +138,13 @@
                 <form action="adminemployees.php" method="GET">
                     <label for="search">Search:</label>
                     <input type="text" name="search" id="search" placeholder="Enter search keyword">
+                    <label for="column">Search by Column:</label>
+                    <select name="column" id="column">
+                        <option value="all">All Columns</option>
+                        <?php foreach ($allowedColumns as $columnName => $displayName): ?>
+                            <option value="<?= $columnName ?>"><?= $displayName ?></option>
+                        <?php endforeach; ?>
+                    </select>
                     <button type="submit">Search</button>
                 </form>
             </div>
