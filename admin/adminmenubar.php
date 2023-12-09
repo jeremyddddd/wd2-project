@@ -3,6 +3,9 @@
         <a href="adminemployees.php">View employees</a>
     </li>
     <li>
+        <a href="admincategory.php">Employee Categories</a>
+    </li>
+    <li>
         <a href="admincustomers.php">View customers</a>
     </li>
     <li>
