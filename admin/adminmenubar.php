@@ -3,7 +3,7 @@
         <a href="adminemployees.php">View employees</a>
     </li>
     <li>
-        <a href="admincategory.php">Employee Categories</a>
+        <a href="admincategory.php">View employee categories</a>
     </li>
     <li>
         <a href="admincustomers.php">View customers</a>
@@ -16,6 +16,9 @@
     </li>
     <li>
         <a href="newemployee.php">Insert new employee</a>
+    </li>
+    <li>
+        <a href="newcategory.php">Insert new employee category</a>
     </li>
     <li>
         <a href="newcustomer.php">Insert new customer</a>

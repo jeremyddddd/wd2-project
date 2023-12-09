@@ -28,6 +28,7 @@
     if($statement->execute())
     {
         header("Location: adminemployees.php");
+        exit;
     }
 }
 ?>

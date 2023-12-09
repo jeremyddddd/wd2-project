@@ -71,6 +71,7 @@
         if($statement->execute())
         {
             header("Location: admincustomers.php");
+            exit;
         }
     }
 ?>
