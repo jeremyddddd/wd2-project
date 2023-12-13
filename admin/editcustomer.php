@@ -173,48 +173,50 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>Edit this Post!</title>
 </head>
 <body>
-    <div id="wrapper">
-        <div id="header">
-            <h1>
-                <a href="admincustomers.php">Best Cleaners Solutions - Edit Customer</a>
+<body>
+    <div id="wrapper" class="container">
+        <div id="header" class="text-center">
+            <h1 class="my-4">
+                <a href="admincustomers.php" class="text-decoration-none">Best Cleaners Solutions - Edit Customer</a>
             </h1>
         </div>
-        <ul id="menu">
-            <li>
-                <a href="admincustomers.php">Home</a>
+        <ul id="menu" class="nav justify-content-center mb-4">
+            <li class="nav-item">
+                <a href="admincustomers.php" class="nav-link">Home</a>
             </li>
         </ul>
         <div id="customer_edit">
-            <form action="editcustomer.php" method="post" enctype="multipart/form-data">
-                <fieldset>
-                    <legend>Customer Details</legend>
-                    <p>
-                        <label>Customer ID:</label>
-                        <?=$customer['customer_id']?>
-                    </p>
-                    <p>
-                        <label for="name">Company name:</label>
-                        <input type="text" name="name" id="name" value="<?=$customer['name']?>" required>
-                    </p>
-                    <p>
-                        <label for="address">Address:</label>
-                        <input type="text" name="address" id="address" value="<?=$customer['address']?>" required>
-                    </p>
-                    <p>
-                        <label for="phone">Phone:</label>
-                        <input type="text" name="phone" id="phone" value=<?=$customer['phone']?> required>
-                    </p>
-                    <p>
-                        <label for="email">Email:</label>
-                        <input type="email" name="email" id="email" value=<?=$customer['email']?> required>
-                    </p>
-                    <p>
-                        <label for="blacklist">Blacklist:</label>
-                        <select name="blacklist" id="blacklist">
-                            <?php if ($customer['blacklist'] == 'x'): ?>
+            <form action="editcustomer.php" method="post" enctype="multipart/form-data" class="w-50 mx-auto">
+                <fieldset class="border p-4 rounded">
+                    <legend class="w-auto px-2">Customer Details</legend>
+                    <div class="form-group">
+                        <label class="form-label">Customer ID:</label>
+                        <span class="form-control-plaintext"><?=$customer['customer_id']?></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="form-label">Company name:</label>
+                        <input type="text" name="name" id="name" class="form-control" value="<?=$customer['name']?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address" class="form-label">Address:</label>
+                        <input type="text" name="address" id="address" class="form-control" value="<?=$customer['address']?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Phone:</label>
+                        <input type="text" name="phone" id="phone" class="form-control" value="<?=$customer['phone']?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" name="email" id="email" class="form-control" value="<?=$customer['email']?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="blacklist" class="form-label">Blacklist:</label>
+                        <select name="blacklist" id="blacklist" class="form-control">
+                        <?php if ($customer['blacklist'] == 'x'): ?>
                                 <option value="x">Yes</option>
                                 <option value="">No</option>
                             <?php else: ?>
@@ -222,26 +224,27 @@
                                 <option value="x">Yes</option>
                             <?php endif ?>
                         </select>
-                    </p>
-                    <p>
-                        <label for="file">Choose a file:</label>
-                        <input type="file" name="file" id="file" accept=".jpg, .png, .gif, .pdf">
-                    </p>
+                    </div>
+                    <div class="form-group">
+                        <label for="file" class="form-label">Choose a file:</label>
+                        <input type="file" name="file" id="file" class="form-control-file" accept=".jpg, .png, .gif, .pdf">
+                    </div>
                     <?php if (!empty($customer['image_filepath'])): ?>
-                    <p>
-                        <img src="<?= $customer['image_filepath']?>" alt="Customer Image">
-                        <input type="submit" name="deleteImage" value="Delete image" onclick="return confirm('Are you sure you wish to delete this image?')">
-                    </p>
-                    <br>
-                    <br>
+                    <div class="form-group text-center">
+                        <img src="<?= $customer['image_filepath']?>" alt="Customer Image" class="img-thumbnail my-3">
+                        <button type="submit" name="deleteImage" class="btn btn-danger" onclick="return confirm('Are you sure you wish to delete this image?')">Delete image</button>
+                    </div>
                     <?php endif ?>
-                    <input type="hidden" name="id" value=<?= $customer['customer_id'] ?>>
-                    <input type="submit" name="update" value="Update">
-                    <input type="submit" name="delete" value="Delete customer" onclick="return confirm('Are you sure you wish to delete this customer?')">
+                    <div class="form-group text-center">
+                        <input type="hidden" name="id" value="<?= $customer['customer_id'] ?>">
+                        <button type="submit" name="update" class="btn btn-primary">Update</button>
+                        <button type="submit" name="delete" class="btn btn-warning" onclick="return confirm('Are you sure you wish to delete this customer?')">Delete customer</button>
+                    </div>
                 </fieldset>
             </form>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>        
 </body>
 </html>
 <?php else: ?>

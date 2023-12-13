@@ -94,66 +94,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="table.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>Edit Comment</title>
 </head>
 <body>
-    <div id="wrapper">
-        <div id="header">
-            <h1>
-                <a href="adminpublicemployees.php">Best Cleaners Solutions</a>
+    <div id="wrapper" class="container">
+        <div id="header" class="text-center">
+            <h1 class="my-4">
+                <a href="adminpublicemployees.php" class="text-decoration-none">Best Cleaners Solutions</a>
             </h1>
         </div>
-        <ul id="menu">
-            <li>
-                <a href="adminpublicemployees.php">Home</a>
+        <ul id="menu" class="nav justify-content-center mb-4">
+            <li class="nav-item">
+                <a href="adminpublicemployees.php" class="nav-link">Home</a>
             </li>
         </ul>
         <div>
             <form action="comments.php" method="post">
-                <fieldset>
-                    <legend>Employee Details</legend>
-                    <p>
-                        <label for="employee_id">Employee ID:</label>
-                        <?= isset($employee_id) ? $employee_id : $employee['employee_id'] ?>
+                <fieldset class="border p-4 rounded">
+                    <legend class="w-auto px-2">Employee Details</legend>
+                    <p class="form-group">
+                        <label for="employee_id" class="form-label">Employee ID:</label>
+                        <span><?= isset($employee_id) ? $employee_id : $employee['employee_id'] ?></span>
                     </p>
-                    <p>
-                        <label for="first_name">First Name:</label>
-                        <?= isset($first_name) ? $first_name : $employee['first_name'] ?>
+                    <p class="form-group">
+                        <label for="first_name" class="form-label">First Name:</label>
+                        <span><?= isset($first_name) ? $first_name : $employee['first_name'] ?></span>
                     </p>
-                    <p>
-                        <label for="last_name">Last Name:</label>
-                        <?= isset($last_name) ? $last_name : $employee['last_name'] ?>
+                    <p class="form-group">
+                        <label for="last_name" class="form-label">Last Name:</label>
+                        <span><?= isset($last_name) ? $last_name : $employee['last_name'] ?></span>
                     </p>
-                    <p>
-                        <label for="phone">Phone:</label>
-                        <?= isset($phone) ? $phone : $employee['phone'] ?>
+                    <p class="form-group">
+                        <label for="phone" class="form-label">Phone:</label>
+                        <span><?= isset($phone) ? $phone : $employee['phone'] ?></span>
                     </p>
-                    <p>
-                        <label for="email">Email:</label>
-                        <?= isset($email) ? $email : $employee['email'] ?>
+                    <p class="form-group">
+                        <label for="email" class="form-label">Email:</label>
+                        <span><?= isset($email) ? $email : $employee['email'] ?></span>
                     </p>
                 </fieldset>
             </form>
             <div id="all_comments">
                 <?php while ($comment = $statementTwo->fetch()): ?>
-                    <div class="comment_post">
+                    <div class="comment_post p-3 my-2 border rounded">
                         <h3><?= $comment['commenter_name'] ?></h3>
-                        <small><?= date("F d, Y h:i a", strtotime($comment['date']))?></small>
-                        <form action="comments.php" method="post">
+                        <small><?= date("F d, Y h:i a", strtotime($comment['date'])) ?></small>
+                        <form action="comments.php" method="post" class="my-2">
                             <input type="hidden" name="id" value="<?= $employee['employee_id'] ?>">
                             <input type="hidden" name="comment_id" value="<?= $comment['comment_id'] ?>">
-                            <button type="submit" name="delete_comment">Delete</button>
-                            <button type="submit" name="hide_comment">Hide</button>
-                            <button type="submit" name="disemvowel_comment">Disemvowel</button>
+                            <div class="btn-group">
+                                <button type="submit" name="delete_comment" class="btn btn-danger btn-sm">Delete</button>
+                                <button type="submit" name="hide_comment" class="btn btn-secondary btn-sm">Hide</button>
+                                <button type="submit" name="disemvowel_comment" class="btn btn-warning btn-sm">Disemvowel</button>
+                            </div>
                         </form>
                         <div class="comment_content">
-                            <?= $comment['comment']?>                            
+                            <?= $comment['comment'] ?>                            
                         </div>
                     </div>
                 <?php endwhile ?>                
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>        
 </body>
 </html>
 <?php else: ?>

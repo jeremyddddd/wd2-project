@@ -107,85 +107,89 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>Edit this Post!</title>
 </head>
 <body>
-    <div id="wrapper">
-        <div id="header">
-            <h1>
-                <a href="adminemployees.php">Best Cleaners Solutions - Edit Employee</a>
+    <div id="wrapper" class="container">
+        <div id="header" class="text-center">
+            <h1 class="my-4">
+                <a href="adminemployees.php" class="text-decoration-none">Best Cleaners Solutions - Edit Employee</a>
             </h1>
         </div>
-        <ul id="menu">
-            <li>
-                <a href="adminemployees.php">Home</a>
+        <ul id="menu" class="nav justify-content-center mb-4">
+            <li class="nav-item">
+                <a href="adminemployees.php" class="nav-link">Home</a>
             </li>
         </ul>
         <div id="employee_edit">
-            <form action="editemployee.php" method="post">
-                <fieldset>
+            <form action="editemployee.php" method="post" class="w-50 mx-auto">
+                <fieldset class="border p-4 rounded">
                     <legend>Employee Details</legend>
-                    <p>
-                        <label for="employee_id">Employee ID:</label>
-                        <?=$employee['employee_id']?>
-                    </p>
-                    <p>
-                        <label for="first_name">First Name:</label>
-                        <input type="text" name="first_name" id="first_name" value=<?=$employee['first_name']?> required>
-                    </p>
-                    <p>
-                        <label for="last_name">Last Name:</label>
-                        <input type="text" name="last_name" id="last_name" value=<?=$employee['last_name']?> required>
-                    </p>
-                    <p>
-                        <label for="phone">Phone:</label>
-                        <input type="text" name="phone" id="phone" value=<?=$employee['phone']?> required>
-                    </p>
-                    <p>
-                        <label for="email">Email:</label>
-                        <input type="email" name="email" id="email" value=<?=$employee['email']?> required>
-                    </p>
-                    <p>
-                        <label for="category">Category:</label>
-                        <select name="category" id="category">
-                            <option value="">None</option> 
+                    <div class="form-group">
+                        <label for="employee_id" class="form-label">Employee ID:</label>
+                        <span class="form-control-plaintext"><?= $employee['employee_id'] ?></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="first_name" class="form-label">First Name:</label>
+                        <input type="text" name="first_name" id="first_name" class="form-control" value="<?= $employee['first_name'] ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name" class="form-label">Last Name:</label>
+                        <input type="text" name="last_name" id="last_name" class="form-control" value="<?= $employee['last_name'] ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Phone:</label>
+                        <input type="text" name="phone" id="phone" class="form-control" value="<?= $employee['phone'] ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" name="email" id="email" class="form-control" value="<?= $employee['email'] ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category" class="form-label">Category:</label>
+                        <select name="category" id="category" class="form-control">
+                            <option value="">None</option>
                             <?php foreach ($categories as $category): ?>
-                                <option value="<?= $category['category_id'] ?>" <?= (isset($employee['category_id']) && $category['category_id'] == $employee['category_id']) ? 'selected' : '' ?>>
-                                    <?= $category['category_name'] ?>
-                                </option>
+                            <option value="<?= $category['category_id'] ?>" <?= (isset($employee['category_id']) && $category['category_id'] == $employee['category_id']) ? 'selected' : '' ?>>
+                                <?= $category['category_name'] ?>
+                            </option>
                             <?php endforeach; ?>
                         </select>
-                    </p>
+                    </div>
                 </fieldset>
-                <fieldset>
+                <fieldset class="border p-4 rounded mt-3">
                     <legend>Dates and Blacklist</legend>
-                    <p>
-                        <label for="start_date">Start Date:</label>
-                        <input type="date" name="start_date" id="start_date" value=<?=$employee['start_date']?> required>
-                    </p>
-                    <p>
-                        <label for="end_date">End Date:</label>
-                        <input type="date" name="end_date" id="end_date" value=<?=$employee['end_date']?>>
-                    </p>
-                    <p>
-                        <label for="blacklist">Blacklist:</label>
-                        <select name="blacklist" id="blacklist">
+                    <div class="form-group">
+                        <label for="start_date" class="form-label">Start Date:</label>
+                        <input type="date" name="start_date" id="start_date" class="form-control" value="<?= $employee['start_date'] ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="end_date" class="form-label">End Date:</label>
+                        <input type="date" name="end_date" id="end_date" class="form-control" value="<?= $employee['end_date'] ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="blacklist" class="form-label">Blacklist:</label>
+                        <select name="blacklist" id="blacklist" class="form-control">
                             <?php if ($employee['blacklist'] == 'x'): ?>
-                                <option value="x">Yes</option>
-                                <option value="">No</option>
+                            <option value="x">Yes</option>
+                            <option value="">No</option>
                             <?php else: ?>
-                                <option value="">No</option>
-                                <option value="x">Yes</option>
+                            <option value="">No</option>
+                            <option value="x">Yes</option>
                             <?php endif ?>
                         </select>
-                    </p>
+                    </div>
                 </fieldset>
-                <input type="hidden" name="id" value=<?= $employee['employee_id'] ?>>
-                <input type="submit" name="update" value="Update">
-                <input type="submit" name="delete" value="Delete" onclick="return confirm('Are you sure you wish to delete this employee?')">
+                <input type="hidden" name="id" value="<?= $employee['employee_id'] ?>">
+                <div class="form-group text-center mt-3">
+                    <button type="submit" name="update" class="btn btn-primary">Update</button>
+                    <button type="submit" name="delete" class="btn btn-danger" onclick="return confirm('Are you sure you wish to delete this employee?')">Delete</button>
+                </div>
             </form>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>        
 </body>
 </html>
 <?php else: ?>
