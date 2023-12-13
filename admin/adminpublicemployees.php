@@ -70,67 +70,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="table.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>Best Clearns Solutions - Employee Management</title>
 </head>
 <body>
-    <div id="wrapper">
-        <div id="header">
-            <h1>
-                <a href="adminpublicemployees.php">Best Cleaners Solutions - Employees</a>   
+<div id="wrapper" class="container-fluid">
+        <div id="header" class="row justify-content-center">
+            <h1 class="my-4">
+                <a href="adminpublicemployees.php" class="text-decoration-none">Best Cleaners Solutions - Employees</a>   
             </h1>
         </div>
-        <ul id="menu">
+        <ul id="menu" class="nav">
+            <?php include('adminmenubar.php'); ?>
         </ul>
-        <div id="all_employees">
-            <div class="sorting-options">
-                <label for="sort">Sort:</label>
-                <select name="sort" id="sort" onchange="location = this.value;">
-                    <option>Select</option>
-                    <option value="adminpublicemployees.php?sort=lastname">Last Name (A-Z)</option>
-                    <option value="adminpublicemployees.php?sort=id">Employee ID (Least to Greatest)</option>
-                </select>
-                <?php if (isset($sort) && $sort == "lastname"): ?>
-                    <h3>
-                        Sorted by: Last name (A-Z)
-                    </h3>
-                <?php elseif (isset($sort) && $sort == "id"): ?>
-                    <h3>
-                        Sorted by: Employee ID (Least to Greatest)
-                    </h3>
-                <?php endif ?>
+        <div id="all_employees" class="mt-3">
+            <div class="sorting-options mb-3">
+                <form class="form-inline">
+                    <label for="sort" class="mr-2">Sort:</label>
+                    <select name="sort" id="sort" class="form-control" onchange="location = this.value;">
+                        <option>Select</option>
+                        <option value="adminpublicemployees.php?sort=lastname">Last Name (A-Z)</option>
+                        <option value="adminpublicemployees.php?sort=id">Employee ID (Least to Greatest)</option>
+                    </select>
+                </form>
             </div>
-            <div class="search-form">
-                <form action="adminpublicemployees.php" method="GET">
-                    <label for="search">Search:</label>
-                    <input type="text" name="search" id="search" placeholder="Enter search keyword">
-                    <button type="submit">Search</button>
+            <div class="search-form mb-3">
+                <form action="adminpublicemployees.php" method="GET" class="form-inline">
+                    <label for="search" class="mr-2">Search:</label>
+                    <input type="text" name="search" id="search" class="form-control mr-2" placeholder="Enter search keyword">
+                    <button type="submit" class="btn btn-primary">Search</button>
                 </form>
             </div>
             <?php while($row = $statement->fetch()): ?>
-                <div>
-                    <h2 class = "employee_header">
-                        <a href=<?="comments.php?id={$row['employee_id']}" ?>><?= $row['first_name'] . ' ' . $row['last_name']?></a>
+                <div class="employee-entry mb-3">
+                    <h2 class="employee_header">
+                        <a href="comments.php?id=<?= $row['employee_id'] ?>" class="text-decoration-none"><?= $row['first_name'] . ' ' . $row['last_name']?></a>
                     </h2>
-                    <table>
-                        <tr>
-                            <th class="small-col">Employee ID</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Phone</th>
-                            <th class="wide-col">Email</th>
-                        </tr>
-                        <tr>
-                            <td class="small-col"><?= $row['employee_id'] ?></td>
-                            <td><?= $row['first_name'] ?></td>
-                            <td><?= $row['last_name'] ?></td>
-                            <td><?= $row['phone'] ?></td>
-                            <td class="wide-col"><?= $row['email'] ?></td>
-                        </tr>
-                    </table>       
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="small-col">Employee ID</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Phone</th>
+                                    <th class="wide-col">Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="small-col"><?= $row['employee_id'] ?></td>
+                                    <td><?= $row['first_name'] ?></td>
+                                    <td><?= $row['last_name'] ?></td>
+                                    <td><?= $row['phone'] ?></td>
+                                    <td class="wide-col"><?= $row['email'] ?></td>
+                                </tr>
+                            </tbody>
+                        </table>       
+                    </div>
                 </div>
             <?php endwhile ?>
         </div>          
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>        
 </body>
 </html>
 <?php else: ?>

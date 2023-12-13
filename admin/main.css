@@ -38,23 +38,22 @@ div.comment_post div.comment_content p
     margin-top: 5px;
 }
 
-.error-field {
+.error-field 
+{
     border: 1px solid #ff0000; 
 }
 
-.pagination {
-    margin-top: 20px; /* Adjust the margin-top as needed */
+.email-col 
+{
+    width: 25%; 
 }
 
-.pagination a {
-    padding: 8px;
-    margin: 0 5px;
-    text-decoration: none;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    color: #333;
+.blacklist-col 
+{
+    width: 8%; 
 }
 
-.pagination a:hover {
-    background-color: #ddd;
+.phone-col 
+{
+    width: 10%; 
 }
