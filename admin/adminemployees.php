@@ -14,6 +14,11 @@
     $queryCount = "";
     $resultsPerPage = 2;
 
+    $categoryQuery = "SELECT * FROM employeecategory";
+    $categoryStatement = $db->prepare($categoryQuery);
+    $categoryStatement->execute();
+    $categories = $categoryStatement->fetchAll();
+
     if (isset($_GET['logout']) && $_GET['logout'] == 'true') 
     {
         session_destroy();
@@ -21,9 +26,34 @@
         exit;
     }
 
-    if (!isset($_GET['id']) && !isset($_GET['search']) && !isset($_GET['sort']))
+    if (isset($_GET['category']) && $_GET['category'] === '') {
+        $query = "SELECT e.*, ec.category_name 
+                    FROM employees e 
+                    LEFT JOIN employeecategory ec ON e.category_id = ec.category_id
+                    ORDER BY e.employee_id DESC";
+    
+        $statement = $db->prepare($query);
+        $statement->execute();
+    }
+    else if (isset($_GET['category']) && $_GET['category'] != '') {
+        $categoryId = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_NUMBER_INT);
+
+        $query = "SELECT e.*, ec.category_name 
+                  FROM employees e 
+                  LEFT JOIN employeecategory ec ON e.category_id = ec.category_id
+                  WHERE e.category_id = :category_id
+                  ORDER BY e.employee_id DESC";
+
+        $statement = $db->prepare($query);
+        $statement->bindValue(':category_id', $categoryId);
+        $statement->execute();
+    }
+    else if (!isset($_GET['id']) && !isset($_GET['search']) && !isset($_GET['sort']))
     {        
-        $query = "SELECT * FROM employees ORDER BY employee_id DESC";
+        $query = "SELECT e.*, ec.category_name 
+                    FROM employees e 
+                    LEFT JOIN employeecategory ec ON e.category_id = ec.category_id
+                    ORDER BY e.employee_id DESC";
 
         $statement = $db->prepare($query);
 
@@ -159,6 +189,15 @@
                     </h3>
                 <?php endif ?>
             </div>
+            <div class="category-menu">
+                <label for="category">Category:</label>
+                <select name="category" id="category" onchange="window.location.href = 'adminemployees.php?category=' + this.value;">
+                    <option value=''>All Categories</option>
+                    <?php foreach ($categories as $category): ?>
+                        <option value="<?= $category['category_id'] ?>"><?= $category['category_name'] ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
             <div class="search-form">
                 <form action="adminemployees.php" method="GET">
                     <label for="search">Search:</label>
@@ -187,6 +226,7 @@
                             <th class="wide-col">Email</th>
                             <th>Start Date</th>
                             <th>End Date</th>
+                            <th class="small-col">Category</th>
                             <th class="small-col">Blacklisted</th>
                         </tr>
                         <tr>
@@ -197,6 +237,7 @@
                             <td class="wide-col"><?= $row['email'] ?></td>
                             <td><?= $row['start_date'] ?></td>
                             <td><?= $row['end_date'] ?></td>
+                            <td class="small-col"><?= $row['category_name'] ?></td>
                             <td class="small-col"><?= $row['blacklist'] ?></td>
                         </tr>
                     </table>       

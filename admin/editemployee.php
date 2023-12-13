@@ -11,7 +11,8 @@
         isset($_POST['email']) &&
         isset($_POST['start_date']) ||
         isset($_POST['end_date']) ||
-        isset($_POST['blacklist'])) 
+        isset($_POST['blacklist']) ||
+        isset($_POST['category'])) 
     {
         $id  = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
         $firstName  = filter_input(INPUT_POST, 'first_name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -21,6 +22,7 @@
         $startDate = filter_input(INPUT_POST, 'start_date', FILTER_SANITIZE_STRING);
         $endDate = filter_input(INPUT_POST, 'end_date', FILTER_SANITIZE_STRING);
         $blacklist = filter_input(INPUT_POST, 'blacklist', FILTER_SANITIZE_SPECIAL_CHARS);
+        $category_id = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_NUMBER_INT);
 
         if (isset($_POST['delete']))
         {         
@@ -42,9 +44,11 @@
                     phone = :phone, 
                     email = :email, 
                     start_date = :start_date, 
-                    end_date = NULLIF(:end_date, '0000-00-00'), 
-                    blacklist = NULLIF(:blacklist, '')
+                    end_date = NULLIF(:end_date, 0000-00-00), 
+                    blacklist = NULLIF(:blacklist, ''), 
+                    category_id = NULLIF(:category_id, '')
                   WHERE employee_id = :id";
+
         
         $statement = $db->prepare($query);
         $statement->bindValue(':first_name', $firstName);        
@@ -55,7 +59,8 @@
         $statement->bindValue(':end_date', $endDate);
         $statement->bindValue(':blacklist', $blacklist);
         $statement->bindValue(':id', $id, PDO::PARAM_INT);
-        
+        $statement->bindValue(':category_id', $category_id, PDO::PARAM_INT);
+
         $statement->execute();
         
         header("Location: adminemployees.php");
@@ -65,13 +70,23 @@
     {
         $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 
-        $query = "SELECT * FROM employees WHERE employee_id = :id";
+        $query = "SELECT e.*, ec.category_name 
+                  FROM employees e 
+                  LEFT JOIN employeecategory ec ON e.category_id = ec.category_id 
+                  WHERE e.employee_id = :id";
+
         $statement = $db->prepare($query);
         $statement->bindValue(':id', $id, PDO::PARAM_INT);
         
         $statement->execute();
 
         $employee = $statement->fetch();
+
+        $categoryQuery = "SELECT * FROM employeecategory";
+
+        $categoryStatement = $db->query($categoryQuery);
+
+        $categories = $categoryStatement->fetchAll();
 
         if (empty($employee['employee_id']))
         {
@@ -129,6 +144,17 @@
                     <p>
                         <label for="email">Email:</label>
                         <input type="email" name="email" id="email" value=<?=$employee['email']?> required>
+                    </p>
+                    <p>
+                        <label for="category">Category:</label>
+                        <select name="category" id="category">
+                            <option value="">None</option> 
+                            <?php foreach ($categories as $category): ?>
+                                <option value="<?= $category['category_id'] ?>" <?= (isset($employee['category_id']) && $category['category_id'] == $employee['category_id']) ? 'selected' : '' ?>>
+                                    <?= $category['category_name'] ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </p>
                 </fieldset>
                 <fieldset>
