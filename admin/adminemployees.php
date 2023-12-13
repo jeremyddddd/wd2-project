@@ -65,7 +65,10 @@
 
         if ($sort == "id")
         {
-            $query = "SELECT * FROM employees ORDER BY employee_id ASC";
+            $query = "SELECT e.*, ec.category_name 
+                      FROM employees e 
+                      LEFT JOIN employeecategory ec ON e.category_id = ec.category_id
+                      ORDER BY e.employee_id ASC";
 
             $statement = $db->prepare($query);
 
@@ -73,7 +76,10 @@
         }
         else if ($sort == "lastname")
         {
-            $query = "SELECT * FROM employees ORDER BY last_name ASC";
+            $query = "SELECT e.*, ec.category_name 
+                      FROM employees e 
+                      LEFT JOIN employeecategory ec ON e.category_id = ec.category_id
+                      ORDER BY e.last_name ASC";
 
             $statement = $db->prepare($query);
 
@@ -81,7 +87,10 @@
         }
         else if ($sort == "startdate")
         {
-            $query = "SELECT * FROM employees ORDER BY start_date ASC";
+            $query = "SELECT e.*, ec.category_name 
+                      FROM employees e 
+                      LEFT JOIN employeecategory ec ON e.category_id = ec.category_id
+                      ORDER BY e.start_date ASC";
 
             $statement = $db->prepare($query);
 
@@ -192,10 +201,12 @@
             <div class="category-menu">
                 <label for="category">Category:</label>
                 <select name="category" id="category" onchange="window.location.href = 'adminemployees.php?category=' + this.value;">
-                    <option value=''>All Categories</option>
+                    <option value='' <?= (!isset($_GET['category']) || $_GET['category'] === '') ? 'selected' : '' ?>>All Categories</option>
                     <?php foreach ($categories as $category): ?>
-                        <option value="<?= $category['category_id'] ?>"><?= $category['category_name'] ?></option>
-                    <?php endforeach; ?>
+                        <option value="<?= $category['category_id'] ?>" <?= (isset($_GET['category']) && $_GET['category'] == $category['category_id']) ? 'selected' : '' ?>>
+                            <?= $category['category_name'] ?>
+                        </option>
+                    <?php endforeach ?>
                 </select>
             </div>
             <div class="search-form">
