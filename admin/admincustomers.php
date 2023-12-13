@@ -35,8 +35,6 @@
         
         $column = filter_input(INPUT_GET, 'column', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-        echo $column;
-
         if (!empty($search)) 
         {
             if ($column === 'all') 
