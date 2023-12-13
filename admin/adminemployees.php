@@ -20,13 +20,6 @@
     $categoryStatement->execute();
     $categories = $categoryStatement->fetchAll();
 
-    if (isset($_GET['logout']) && $_GET['logout'] == 'true') 
-    {
-        session_destroy();
-        header("Location: /wd2/Project/wd2-project/public/Login.php");
-        exit;
-    }
-
     if (isset($_GET['category']) && $_GET['category'] === '') 
     {
         header("Location: adminemployees.php");

@@ -73,7 +73,7 @@
     <title>New Login</title>
 </head>
 <body>
-<div id="wrapper" class="container">
+    <div id="wrapper" class="container">
         <div id="header" class="text-center">
             <h1 class="my-4">
                 <a href="adminlogins.php" class="text-decoration-none">Best Cleaners Solutions - New Login</a>
@@ -97,18 +97,18 @@
                     </div>
                     <div class="form-group">
                         <label for="password" class="form-label">Password:</label>
-                        <input type="password" name="password" id="password" class="form-control" required>
+                        <input type="password" name="password" id="password" class="form-control" value="<?= isset($password) ? $password : '' ?>" required>
                     </div>
                     <div class="form-group">
                         <label for="confirm_password" class="form-label">Confirm Password:</label>
-                        <input type="password" name="confirm_password" id="confirm_password" class="form-control" required>
+                        <input type="password" name="confirm_password" id="confirm_password" class="form-control" value="<?= isset($confirm_password) ? $confirm_password : '' ?>" required>
                         <?php if ($password_error != ''): ?>
                             <p class='error text-danger'><?= $password_error ?></p>
                         <?php endif ?>
                     </div>
                     <div class="form-group">
                         <label for="email" class="form-label">Email:</label>
-                        <input type="email" name="email" id="email" class="form-control" required>
+                        <input type="email" name="email" id="email" class="form-control" value="<?= isset($email) ? $email : '' ?>" required>
                         <?php if ($email_error != ''): ?>
                             <p class='error text-danger'><?= $email_error ?></p>
                         <?php endif ?>

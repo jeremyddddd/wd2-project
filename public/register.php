@@ -107,53 +107,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="register.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>Register Account</title>
 </head>
 <body>
-    <div class="registration-container">
-        <h2>Register</h2>
-        <form action="register.php" method="post">
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" placeholder="Enter your username" value="<?= isset($username) ? $username : '' ?>" required>
-                <?php if ($username_error != ''): ?>
-                    <p class='error'><?= $username_error ?></p>
-                <?php endif ?>
-            </div>
+    <div class="container mt-5">
+        <div class="registration-container">
+            <h2>Register</h2>
+            <form action="register.php" method="post" class="w-50 mx-auto">
+                <div class="form-group mb-3">
+                    <label for="username" class="form-label">Username:</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" value="<?= isset($username) ? $username : '' ?>" required>
+                    <?php if ($username_error != ''): ?>
+                        <p class='error text-danger'><?= $username_error ?></p>
+                    <?php endif ?>
+                </div>
 
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" value="<?= isset($password) ? $password : '' ?>" required>
-            </div>
+                <div class="form-group mb-3">
+                    <label for="password" class="form-label">Password:</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" value="<?= isset($password) ? $password : '' ?>" required>
+                </div>
 
-            <div class="form-group">
-                <label for="confirm_password">Confirm Password:</label>
-                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" value="<?= isset($confirm_password) ? $confirm_password : '' ?>" required>
-                <?php if ($password_error != ''): ?>
-                    <p class='error'><?= $password_error ?></p>
-                <?php endif ?>
-            </div>
+                <div class="form-group mb-3">
+                    <label for="confirm_password" class="form-label">Confirm Password:</label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Confirm your password" value="<?= isset($confirm_password) ? $confirm_password : '' ?>" required>
+                    <?php if ($password_error != ''): ?>
+                        <p class='error text-danger'><?= $password_error ?></p>
+                    <?php endif ?>
+                </div>
 
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" value="<?= isset($email) ? $email : '' ?>" required>
-                <?php if ($email_error != ''): ?>
-                    <p class='error'><?= $email_error ?></p>
-                <?php endif ?>
-            </div>
+                <div class="form-group mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" value="<?= isset($email) ? $email : '' ?>" required>
+                    <?php if ($email_error != ''): ?>
+                        <p class='error text-danger'><?= $email_error ?></p>
+                    <?php endif ?>
+                </div>
 
-            <div class="form-group">
-                <label for="captcha">CAPTCHA:</label>
-                <img src="captcha_image.php" alt="CAPTCHA Image">
-                <input type="text" id="captcha" name="captcha" placeholder="Enter CAPTCHA code" required>
-                <?php if (isset($captcha_error)): ?>
-                    <p class='error'><?= $captcha_error ?></p>
-                <?php endif ?>
-            </div>
+                <div class="form-group mb-3">
+                    <label for="captcha" class="form-label">CAPTCHA:</label>
+                    <img src="captcha_image.php" alt="CAPTCHA Image" class="d-block mb-2">
+                    <input type="text" id="captcha" name="captcha" class="form-control" placeholder="Enter CAPTCHA code" required>
+                    <?php if (isset($captcha_error)): ?>
+                        <p class='error text-danger'><?= $captcha_error ?></p>
+                    <?php endif ?>
+                </div>
 
-            <button type="submit">Register</button>
-        </form>
-        <p>Already have an account? <a href="login.php">Login here</a></p>
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+            <p class="mt-3">Already have an account? <a href="login.php">Login here</a></p>
+        </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>        
 </body>
 </html>

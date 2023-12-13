@@ -68,21 +68,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="table.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>Best Clearns Solutions - Employee Management</title>
 </head>
 <body>
-    <div id="wrapper">
-        <div id="header">
-            <h1>
-                <a href="publicemployees.php">Best Cleaners Solutions - Employees</a>   
+    <div id="wrapper" class="container">
+        <div id="header" class="text-center">
+            <h1 class="my-4">
+                <a href="publicemployees.php">Best Cleaners Solutions - Employees</a>
             </h1>
         </div>
-        <ul id="menu">
-        </ul>
+        <div class="mb-3">
+            <a href="login.php" class="btn btn-link">Login or Create account</a>
+        </div>
         <div id="all_employees">
-            <div class="sorting-options">
-                <label for="sort">Sort:</label>
-                <select name="sort" id="sort" onchange="location = this.value;">
+            <div class="sorting-options mb-3">
+                <label for="sort" class="form-label">Sort:</label>
+                <select name="sort" id="sort" class="form-select" onchange="location = this.value;">
                     <option>Select</option>
                     <option value="publicemployees.php?sort=lastname">Last Name (A-Z)</option>
                     <option value="publicemployees.php?sort=id">Employee ID (Least to Greatest)</option>
@@ -97,19 +99,19 @@
                     </h3>
                 <?php endif ?>
             </div>
-            <div class="search-form">
-                <form action="publicemployees.php" method="GET">
-                    <label for="search">Search:</label>
-                    <input type="text" name="search" id="search" placeholder="Enter search keyword">
-                    <button type="submit">Search</button>
+            <div class="search-form mb-3">
+                <form action="publicemployees.php" method="GET" class="d-flex">
+                    <label for="search" class="form-label me-2">Search:</label>
+                    <input type="text" name="search" id="search" class="form-control me-2" placeholder="Enter search keyword">
+                    <button type="submit" class="btn btn-primary">Search</button>
                 </form>
             </div>
             <?php while($row = $statement->fetch()): ?>
                 <div>
-                    <h2 class = "employee_header">
+                    <h2 class="employee_header">
                         <a href=<?="commentemployee.php?id={$row['employee_id']}" ?>><?= $row['first_name'] . ' ' . $row['last_name']?></a>
                     </h2>
-                    <table>
+                    <table class="table">
                         <tr>
                             <th class="small-col">Employee ID</th>
                             <th>First Name</th>
@@ -127,7 +129,8 @@
                     </table>       
                 </div>
             <?php endwhile ?>
-        </div>          
+        </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>        
 </body>
 </html>

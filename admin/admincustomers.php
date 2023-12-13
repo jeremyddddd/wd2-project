@@ -14,13 +14,6 @@
     $queryCount = "";
     $resultsPerPage = 2;
 
-    if (isset($_GET['logout']) && $_GET['logout'] == 'true') 
-    {
-        session_destroy();
-        header("Location: /wd2/Project/wd2-project/public/Login.php");
-        exit;
-    }
-
     if(!isset($_GET['id']) && !isset($_GET['search']))
     {
         $query = "SELECT * FROM customers ORDER BY customer_id DESC";

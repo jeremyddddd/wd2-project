@@ -3,13 +3,6 @@
 
     require('connect.php');
 
-    if (isset($_GET['logout']) && $_GET['logout'] == 'true') 
-    {
-        session_destroy();
-        header("Location: /wd2/Project/wd2-project/public/Login.php");
-        exit;
-    }
-
     if (!isset($_GET['id']))
     {        
         $query = "SELECT * FROM login ORDER BY account_id DESC";
