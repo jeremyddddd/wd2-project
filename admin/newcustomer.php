@@ -84,56 +84,59 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>Edit this Post!</title>
 </head>
 <body>
-    <div id="wrapper">
-        <div id="header">
-            <h1>
-                <a href="admincustomers.php">Best Cleaners Solutions - Add Customer</a>
+    <div id="wrapper" class="container">
+        <div id="header" class="text-center">
+            <h1 class="my-4">
+                <a href="admincustomers.php" class="text-decoration-none">Best Cleaners Solutions - Add Customer</a>
             </h1>
         </div>
-        <ul id="menu">
-            <li>
-                <a href="admincustomers.php">Home</a>
+        <ul id="menu" class="nav justify-content-center mb-4">
+            <li class="nav-item">
+                <a href="admincustomers.php" class="nav-link">Home</a>
             </li>
         </ul>
         <div id="customer_add">
-            <form action="newcustomer.php" method="post" enctype="multipart/form-data">
-                <fieldset>
+            <form action="newcustomer.php" method="post" enctype="multipart/form-data" class="w-50 mx-auto">
+                <fieldset class="border p-4 rounded">
                     <legend>Add New Customer</legend>
-                    <p>
-                        <label for="name">Company Name:</label>
-                        <input type="text" name="name" id="name" required>
-                    </p>
+                    <div class="form-group">
+                        <label for="name" class="form-label">Company Name:</label>
+                        <input type="text" name="name" id="name" class="form-control" required>
+                    </div>
                     
-                    <p>
-                        <label for="address">Address:</label>
-                        <input type="text" name="address" id="address" required>
-                    </p>
+                    <div class="form-group">
+                        <label for="address" class="form-label">Address:</label>
+                        <input type="text" name="address" id="address" class="form-control" required>
+                    </div>
 
-                    <p>
-                        <label for="phone">Phone:</label>
-                        <input type="tel" name="phone" id="phone">
-                    </p>
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Phone:</label>
+                        <input type="tel" name="phone" id="phone" class="form-control">
+                    </div>
 
-                    <p>
-                        <label for="email">Email:</label>
-                        <input type="email" name="email" id="email" required>
-                    </p>
-                    <fieldset>
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" name="email" id="email" class="form-control" required>
+                    </div>
+                    <fieldset class="border p-4 rounded mt-3">
                         <legend>Contract Upload</legend>
-                        <p>
-                            <label for="file">Choose a file:</label>
-                            <input type="file" name="file" id="file" accept=".jpg, .png, .gif, .pdf">
-                        </p>
+                        <div class="form-group">
+                            <label for="file" class="form-label">Choose a file:</label>
+                            <input type="file" name="file" id="file" class="form-control-file" accept=".jpg, .png, .gif, .pdf">
+                        </div>
                     </fieldset>
-                    <br>
-                    <button type="submit">Add Customer</button>
+                    <div class="form-group text-center mt-3">
+                        <button type="submit" class="btn btn-primary">Add Customer</button>
+                    </div>
                 </fieldset>                
             </form>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>        
 </body>
 </html>
 <?php else: ?>

@@ -69,54 +69,58 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>New Login</title>
 </head>
 <body>
-    <div id="wrapper">
-        <div id="header">
-            <h1>
-                <a href="adminlogins.php">Best Cleaners Solutions - New Login</a>
+<div id="wrapper" class="container">
+        <div id="header" class="text-center">
+            <h1 class="my-4">
+                <a href="adminlogins.php" class="text-decoration-none">Best Cleaners Solutions - New Login</a>
             </h1>
         </div>
-        <ul id="menu">
-            <li>
-                <a href="adminlogins.php">Home</a>
+        <ul id="menu" class="nav justify-content-center mb-4">
+            <li class="nav-item">
+                <a href="adminlogins.php" class="nav-link">Home</a>
             </li>
         </ul>
         <div id="login_edit">
-            <form action="newlogin.php" method="post">
-                <fieldset>
+            <form action="newlogin.php" method="post" class="w-50 mx-auto">
+                <fieldset class="border p-4 rounded">
                     <legend>New User</legend>
-                    <p>
-                        <label for="username">Username:</label>
-                        <input type="text" name="username" id="username" value="<?= isset($username) ? $username : '' ?>" required>
+                    <div class="form-group">
+                        <label for="username" class="form-label">Username:</label>
+                        <input type="text" name="username" id="username" class="form-control" value="<?= isset($username) ? $username : '' ?>" required>
                         <?php if ($username_error != ''): ?>
-                            <p class='error'><?= $username_error ?></p>
+                            <p class='error text-danger'><?= $username_error ?></p>
                         <?php endif ?>
-                    </p>
-                    <p>
-                        <label for="password">Password:</label>
-                        <input type="password" name="password" id="password" value="<?= isset($password) ? $password : '' ?>" required>
-                    </p>
-                    <p>
-                        <label for="confirm_password">Confirm Password:</label>
-                        <input type="password" name="confirm_password" id="confirm_password" value="<?= isset($confirm_password) ? $confirm_password : '' ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password:</label>
+                        <input type="password" name="password" id="password" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password" class="form-label">Confirm Password:</label>
+                        <input type="password" name="confirm_password" id="confirm_password" class="form-control" required>
                         <?php if ($password_error != ''): ?>
-                            <p class='error'><?= $password_error ?></p>
+                            <p class='error text-danger'><?= $password_error ?></p>
                         <?php endif ?>
-                    </p>
-                    <p>
-                        <label for="email">Email:</label>
-                        <input type="email" name="email" id="email" value="<?= isset($email) ? $email : '' ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" name="email" id="email" class="form-control" required>
                         <?php if ($email_error != ''): ?>
-                            <p class='error'><?= $email_error ?></p>
+                            <p class='error text-danger'><?= $email_error ?></p>
                         <?php endif ?>
-                    </p>
-                    <input type="submit" name="register" value="Register">
+                    </div>
+                    <div class="form-group text-center">
+                        <input type="submit" name="register" value="Register" class="btn btn-primary">
+                    </div>
                 </fieldset>
             </form>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>        
 </body>
 </html>
 <?php else: ?>
