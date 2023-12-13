@@ -20,8 +20,8 @@
         isset($_FILES['file'])) 
     {
         $id  = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
-        $firstName  = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $lastName = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $name  = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $address = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
         $blacklist = filter_input(INPUT_POST, 'blacklist', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -130,8 +130,8 @@
                   WHERE customer_id = :id";
         
         $statement = $db->prepare($query);
-        $statement->bindValue(':name', $firstName);        
-        $statement->bindValue(':address', $lastName);
+        $statement->bindValue(':name', $name);        
+        $statement->bindValue(':address', $address);
         $statement->bindValue(':phone', $phone);
         $statement->bindValue(':email', $email);
         $statement->bindValue(':blacklist', $blacklist);
