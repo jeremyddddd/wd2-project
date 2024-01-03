@@ -75,11 +75,11 @@
     <div id="wrapper" class="container">
         <div id="header" class="text-center">
             <h1 class="my-4">
-                <a href="publicemployees.php">Best Cleaners Solutions - Employees</a>
+                <a href="publicemployees.php" class="text-decoration-none">Best Cleaners Solutions - Employees</a>
             </h1>
         </div>
         <div class="mb-3">
-            <a href="login.php" class="btn btn-link">Login or Create account</a>
+            <a href="login.php" class="btn btn-link text-decoration-none">Login or Create account</a>
         </div>
         <div id="all_employees">
             <div class="sorting-options mb-3">
@@ -109,7 +109,7 @@
             <?php while($row = $statement->fetch()): ?>
                 <div>
                     <h2 class="employee_header">
-                        <a href=<?="commentemployee.php?id={$row['employee_id']}" ?>><?= $row['first_name'] . ' ' . $row['last_name']?></a>
+                        <a href=<?="commentemployee.php?id={$row['employee_id']}" ?> class="text-decoration-none"><?= $row['first_name'] . ' ' . $row['last_name']?></a>
                     </h2>
                     <table class="table">
                         <tr>

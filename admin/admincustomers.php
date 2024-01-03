@@ -73,6 +73,11 @@
             header("Location: admincustomers.php");
             exit;
         }
+    }
+    else 
+    {
+        header("Location: admincustomers.php");
+        exit;
     } 
 
 ?>

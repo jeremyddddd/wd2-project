@@ -157,11 +157,13 @@
         if (empty($customer['customer_id']))
         {
             header("Location: admincustomers.php");
+            exit;
         }
     }
     else
     {
         header("Location: admincustomers.php");
+        exit;
     }
 ?>
 

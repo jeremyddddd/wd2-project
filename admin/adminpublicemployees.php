@@ -57,6 +57,7 @@
     else
     {
         header("Location: adminpublicemployees.php");
+        exit;
     }
 
 ?>
@@ -80,9 +81,7 @@
                 <a href="adminpublicemployees.php" class="text-decoration-none">Best Cleaners Solutions - Employees</a>   
             </h1>
         </div>
-        <ul id="menu" class="nav">
-            <?php include('adminmenubar.php'); ?>
-        </ul>
+        <?php include('adminmenubar.php'); ?>
         <div id="all_employees" class="mt-3">
             <div class="sorting-options mb-3">
                 <form class="form-inline">

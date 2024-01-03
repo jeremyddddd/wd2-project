@@ -25,3 +25,18 @@ th
 {
     background-color: #f2f2f2;
 }
+
+.email-col 
+{
+    width: 25%; 
+}
+
+.blacklist-col 
+{
+    width: 8%; 
+}
+
+.phone-col 
+{
+    width: 10%; 
+}

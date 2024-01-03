@@ -42,18 +42,3 @@ div.comment_post div.comment_content p
 {
     border: 1px solid #ff0000; 
 }
-
-.email-col 
-{
-    width: 25%; 
-}
-
-.blacklist-col 
-{
-    width: 8%; 
-}
-
-.phone-col 
-{
-    width: 10%; 
-}

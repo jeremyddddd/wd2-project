@@ -11,6 +11,11 @@
 
         $statement->execute();
     }
+    else 
+    {
+        header("Location: admincategory.php");
+        exit;
+    }
 ?>
 
 <?php if(isset($_SESSION['username']) && $_SESSION['role'] == 'admin'):?>

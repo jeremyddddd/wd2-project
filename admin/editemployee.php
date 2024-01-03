@@ -91,11 +91,13 @@
         if (empty($employee['employee_id']))
         {
             header("Location: adminemployees.php");
+            exit;
         }
     }
     else
     {
         header("Location: adminemployees.php");
+        exit;
     }
 ?>
 

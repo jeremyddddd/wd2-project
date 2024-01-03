@@ -25,24 +25,44 @@
         header("Location: adminemployees.php");
         exit;
     }
-    else if (isset($_GET['categorySearch']) && $_GET['categorySearch'] != '') 
+    else if (isset($_GET['categorySearch'])) 
     {
         $categorySearchId = filter_input(INPUT_GET, 'categorySearch', FILTER_SANITIZE_NUMBER_INT);
         $searchKeyword = filter_input(INPUT_GET, 'keyword', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    
-        $query = "SELECT e.*, ec.category_name 
-                  FROM employees e 
-                  LEFT JOIN employeecategory ec ON e.category_id = ec.category_id
-                  WHERE e.category_id = :category_id AND (
-                      e.first_name LIKE :keyword OR 
-                      e.last_name LIKE :keyword OR 
-                      e.phone LIKE :keyword OR 
-                      e.email LIKE :keyword)
-                  ORDER BY e.employee_id DESC";
-    
+        $searchTerm = '%' . $searchKeyword . '%';
+
+        if ($categorySearchId === '') 
+        { 
+            $query = "SELECT e.*, ec.category_name 
+                      FROM employees e 
+                      LEFT JOIN employeecategory ec ON e.category_id = ec.category_id
+                      WHERE (e.first_name LIKE :keyword OR 
+                             e.last_name LIKE :keyword OR 
+                             e.phone LIKE :keyword OR 
+                             e.email LIKE :keyword)
+                      ORDER BY e.employee_id DESC";
+        } 
+        else 
+        { 
+            $query = "SELECT e.*, ec.category_name 
+                      FROM employees e 
+                      LEFT JOIN employeecategory ec ON e.category_id = ec.category_id
+                      WHERE e.category_id = :category_id AND (
+                          e.first_name LIKE :keyword OR 
+                          e.last_name LIKE :keyword OR 
+                          e.phone LIKE :keyword OR 
+                          e.email LIKE :keyword)
+                      ORDER BY e.employee_id DESC";
+        }
+
         $statement = $db->prepare($query);
-        $statement->bindValue(':category_id', $categorySearchId);
-        $statement->bindValue(':keyword', '%' . $searchKeyword . '%');
+
+        if ($categorySearchId !== '') 
+        { 
+            $statement->bindValue(':category_id', $categorySearchId, PDO::PARAM_INT);
+        }
+
+        $statement->bindValue(':keyword', $searchTerm);
         $statement->execute();
     }
     else if (isset($_GET['category']) && $_GET['category'] != '') 
@@ -196,7 +216,7 @@
                 <form class="form-inline">
                     <label for="category" class="mr-2">Category:</label>
                     <select name="category" id="category" class="form-control" onchange="window.location.href = 'adminemployees.php?category=' + this.value;">
-                        <option value='' <?= (!isset($_GET['category']) || $_GET['category'] === '') ? 'selected' : '' ?>>All Categories</option>
+                        <option value='' <?= (!isset($_GET['category']) || $_GET['category'] === '') ? 'selected' : '' ?>>Select Catagory</option>
                         <?php foreach ($categories as $category): ?>
                             <option value="<?= $category['category_id'] ?>" <?= (isset($_GET['category']) && $_GET['category'] == $category['category_id']) ? 'selected' : '' ?>>
                                 <?= $category['category_name'] ?>
@@ -232,7 +252,7 @@
                     <div class="form-group">
                         <label for="categorySearch">Category:</label>
                         <select name="categorySearch" id="categorySearch" class="form-control ml-2">
-                            <option value="">Select Category</option>
+                            <option value="">All Categories</option>
                             <?php foreach ($categories as $category): ?>
                                 <option value="<?= $category['category_id'] ?>"><?= $category['category_name'] ?></option>
                             <?php endforeach ?>
